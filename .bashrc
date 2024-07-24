@@ -117,13 +117,16 @@ if ! shopt -oq posix; then
 fi
 
 #neofetch
-fastfetch
+#fastfetch
 
 # Install Starship if not found
-eval "$(starship init bash)" || curl -sS https://starship.rs/install.sh | sh && eval "$(starship init bash)"
+if [[ $(whereis starship) == *starship* ]]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+fi
+eval "$(starship init bash)" 
+clear
 
 alias vi="vim"
-alias nvim="/usr/local/bin/nvim-linux64/nvim-linux64/bin/nvim"
 
 # Install NVM if not found
 if [ ! -d "$HOME/.nvm" ]; then
@@ -137,8 +140,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # Java setup
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto/jre/bin/java
-export JRE_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto/jre
+export JAVA_HOME=/usr/lib/jvm/java
+export JRE_HOME=/usr/lib/jvm/jre
 export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
 
 export M2_HOME=/usr/local/apache-maven
