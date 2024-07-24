@@ -117,11 +117,11 @@ if ! shopt -oq posix; then
 fi
 
 #neofetch
+fastfetch
 
 # Install Starship if not found
-eval "$(starship init bash)"
+eval "$(starship init bash)" || curl -sS https://starship.rs/install.sh | sh && eval "$(starship init bash)"
 
-#alias nvim="hx"
 alias vi="vim"
 alias nvim="/usr/local/bin/nvim-linux64/nvim-linux64/bin/nvim"
 
