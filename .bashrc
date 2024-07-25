@@ -116,9 +116,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-#neofetch
-#fastfetch
-
 # Install Starship if not found
 if [[ $(whereis starship) == *starship* ]]; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -147,3 +144,6 @@ export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
 export M2_HOME=/usr/local/apache-maven
 export M2=$M2_HOME/bin
 export PATH=$M2:$PATH
+
+neofetch
+#fastfetch
