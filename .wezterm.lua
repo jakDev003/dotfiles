@@ -48,10 +48,19 @@ end
 config.color_scheme = '3024 (dark) (terminal.sexy)'
 config.font = wezterm.font {
   family = 'JetBrainsMono Nerd Font',
-  harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' },
 }
 config.font_size = 14
 config.line_height = 1.2
+
+-- Font options
+config.font_shaper = "Harfbuzz"
+
+-- Font rendering
+config.freetype_render_target = "Light"
+
+-- Cursor style
+config.default_cursor_style = "BlinkingBar"
+
 
 config.window_frame = {
     font = wezterm.font { family = 'Noto Sans', weight = 'Regular' },
