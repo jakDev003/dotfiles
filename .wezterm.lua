@@ -53,7 +53,7 @@ config.font = wezterm.font {
   family = 'JetBrainsMono Nerd Font',
 }
 config.font_size = 14
-config.line_height = 1.2
+config.line_height = 1
 
 -- Font options
 config.font_shaper = "Harfbuzz"
