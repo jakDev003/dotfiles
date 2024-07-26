@@ -41,6 +41,9 @@ else
 	
 	config.wsl_domains = wsl_domains
 	config.default_domain = "WSL:Ubuntu-24.04"
+	
+	-- If this gives errors try running this command from an elevated PowerShell
+	--"Get-Service vmcompute | Restart-Service"
 end
 
 
