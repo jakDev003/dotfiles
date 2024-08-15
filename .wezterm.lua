@@ -19,6 +19,7 @@ then
 	config.default_prog = { '/usr/bin/bash', '-l' }
 else
 	config.default_prog = { 'C:/Program Files/Git/bin/bash.exe', '-l' }
+	config.default_cwd = "C:/Users/jkagiwada/Documents/Git-Repos"
 
 	-- This is for WSL	
 	--local wsl_domains = wezterm.default_wsl_domains()
@@ -35,56 +36,31 @@ else
 	--"Get-Service vmcompute | Restart-Service"
 
 	config.launch_menu = {
-		-- {
-		-- 	label = 'PWSH',
-		-- 	args = { 'pwsh.exe', '-l' },
-		-- 	cwd = "C:/Users/jkagiwada/Documents/Git-Repos",
-		-- 	-- set_environment_variables = { FOO = "bar" },	
-		-- },
-		{
-			label = 'PWSH-old',
-			args = { 'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe' },
-			cwd = "C:/Users/jkagiwada/Documents/Git-Repos",
-			-- set_environment_variables = { FOO = "bar" },	
-		},
 		{
 			label = 'Git Bash',
 			args = { 'C:/Program Files/Git/bin/bash.exe', '-l' },
 			cwd = "C:/Users/jkagiwada/Documents/Git-Repos",
 			-- set_environment_variables = { FOO = "bar" },	
 		},
-		{
-			label = 'DevDev',
-			args = { 'pwsh.exe ssh dev', '-l' },
+        {
+			label = 'PWSH-old',
+			args = { 'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe' },
 			cwd = "C:/Users/jkagiwada/Documents/Git-Repos",
 			-- set_environment_variables = { FOO = "bar" },	
 		},
 		{
-			label = 'DevBuild',
-			args = { 'pwsh.exe ssh dev-build', '-l' },
-			cwd = "C:/Users/jkagiwada/Documents/Git-Repos",
-			-- set_environment_variables = { FOO = "bar" },	
-		},
-		{
-			label = 'DevTunnel',
-			args = { 'pwsh.exe ssh dev-tunnel', '-l' },
-			cwd = "C:/Users/jkagiwada/Documents/Git-Repos",
-			-- set_environment_variables = { FOO = "bar" },	
-		},
-		{
-			label = 'JAKDevBox',
-			args = { 'pwsh.exe ssh jakdevbox', '-l' },
-			cwd = "C:/Users/jkagiwada/Documents/Git-Repos",
-			-- set_environment_variables = { FOO = "bar" },	
-		},
-		{
-			label = "CleanupDocker",
-			args = { 'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe  %USERPROFILE%/Documents/CustomCode/Powershell/Cleanup_Docker.ps1' }
+			label = 'PWSH',
+		 	args = { 'pwsh.exe', '-l' },
+		 	cwd = "C:/Users/jkagiwada/Documents/Git-Repos",
+		 	-- set_environment_variables = { FOO = "bar" },	
 		},
 		{
 			label = 'CMD',
 			args = { 'cmd.exe', '-l' },
-
+		},
+		{
+			label = 'WSL',
+			args = { 'C:/Windows/System32/wsl.exe', '-l' }
 		},
 	}
 end
@@ -96,7 +72,7 @@ config.font = wezterm.font {
 	family = 'JetBrainsMono Nerd Font',
 }
 config.font_size = 14
-config.line_height = 1
+config.line_height = 1.2
 
 -- Font options
 config.font_shaper = "Harfbuzz"
