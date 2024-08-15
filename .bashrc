@@ -116,34 +116,60 @@ if ! shopt -oq posix; then
   fi
 fi
 
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+alias vi="vim"
+
 # Install Starship if not found
 if [[ $(whereis starship) == *starship* ]]; then
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash -s -- -y
 fi
 eval "$(starship init bash)" 
 clear
 
-alias vi="vim"
-
 # Install NVM if not found
-if [ ! -d "$HOME/.nvm" ]; then
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    clear
-fi
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR="~/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if [[ $(whereis npm) == *npm* ]]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash -s -- -y
+    clear
+fi
+
+# Cargo Install
+export PATH=$PATH:/home/dev/.cargo/bin
+if [[ $(whereis cargo) == *cargo* ]]; then
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+    clear
+fi
+
+# Go Install
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOROOT:/usr/local/go/bin
+if [[ $(whereis go) == *go* ]]; then
+    VERSION=1.19.5
+    # Pull Go Tarball
+    wget https://go.dev/dl/go$VERSION.linux-amd64.tar.gz
+    
+    # Extract to /usr/local
+    sudo tar -zxvf go$VERSION.linux-amd64.tar.gz -C /usr/local
+    
+    # Remove Tarball
+    rm -rf ./go$VERSION.linux-amd64.tar.gz
+    clear
+fi
 
 # Java setup
-export JAVA_HOME=/usr/lib/jvm/java
-export JRE_HOME=/usr/lib/jvm/jre
-export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+#export JAVA_HOME=/usr/lib/jvm/java
+#export JRE_HOME=/usr/lib/jvm/jre
+#export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+export JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
+export PATH=$PATH:$JAVA_HOME/bin
 
 export M2_HOME=/usr/local/apache-maven
 export M2=$M2_HOME/bin
 export PATH=$M2:$PATH
 
-neofetch
-#fastfetch
+#neofetch
+fastfetch
