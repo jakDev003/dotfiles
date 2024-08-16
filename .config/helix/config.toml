@@ -32,6 +32,7 @@ render = "all"
 # Use system clipboard
 y = [":clipboard-yank", "yank"]
 p = [":clipboard-paste-before"]
+d = { d = ["extend_line_below", "delete_selection"] }
 
 [editor.statusline]
 left = ["mode", "spinner", "version-control"]
