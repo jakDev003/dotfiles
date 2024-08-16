@@ -1,4 +1,7 @@
-theme = "tokyonight_storm"
+#theme = "tokyonight_storm"
+#theme = "ayu_dark"
+theme = "heisenberg"
+
 
 [editor]
 mouse = true
