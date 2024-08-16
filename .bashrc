@@ -127,39 +127,6 @@ fi
 eval "$(starship init bash)" 
 clear
 
-# Install NVM if not found
-export NVM_DIR="~/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-if [[ $(whereis npm) == *npm* ]]; then
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash -s -- -y
-    clear
-fi
-
-# Cargo Install
-export PATH=$PATH:/home/dev/.cargo/bin
-if [[ $(whereis cargo) == *cargo* ]]; then
-    curl https://sh.rustup.rs -sSf | sh -s -- -y
-    clear
-fi
-
-# Go Install
-export GOROOT=/usr/local/go
-export PATH=$PATH:$GOROOT:/usr/local/go/bin
-if [[ $(whereis go) == *go* ]]; then
-    VERSION=1.19.5
-    # Pull Go Tarball
-    wget https://go.dev/dl/go$VERSION.linux-amd64.tar.gz
-    
-    # Extract to /usr/local
-    sudo tar -zxvf go$VERSION.linux-amd64.tar.gz -C /usr/local
-    
-    # Remove Tarball
-    rm -rf ./go$VERSION.linux-amd64.tar.gz
-    clear
-fi
-
 # Java setup
 #export JAVA_HOME=/usr/lib/jvm/java
 #export JRE_HOME=/usr/lib/jvm/jre
