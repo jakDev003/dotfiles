@@ -118,6 +118,22 @@ fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+# Custom Info
+manufacturer () {
+    command lscpu | grep "Model name" "$@"
+    echo "$?"
+}
+
+username () {
+    command uname "$@"
+    echo "$?"
+}
+
+kernalname () {
+    command uname -r "$@"
+    echo "$?"
+}
+
 alias vi="vim"
 
 # Install Starship if not found
@@ -131,12 +147,17 @@ clear
 #export JAVA_HOME=/usr/lib/jvm/java
 #export JRE_HOME=/usr/lib/jvm/jre
 #export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
-export JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
+#export JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 export PATH=$PATH:$JAVA_HOME/bin
 
 export M2_HOME=/usr/local/apache-maven
 export M2=$M2_HOME/bin
 export PATH=$M2:$PATH
 
-#neofetch
-fastfetch
+. "$HOME/.cargo/env"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# My Custom neofetch substitution
+username
+manufacturer
