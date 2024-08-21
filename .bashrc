@@ -118,20 +118,40 @@ fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# Custom Info
-manufacturer () {
-    command lscpu | grep "Model name" "$@"
-    echo "$?"
+# Utilities
+trimstring () {
+    string=$1
+    trimmed_string=$string
+    if [[ $2 -eq 1 ]]; then
+        # trim start
+        trimmed_string="${string#"${string%%[![:space:]]*}"}"
+    elif [[ $2 -eq 2 ]]; then
+        # trim end
+        trimmed_string="${string%"${string##*[![:space:]]}"}"
+    elif [[ $2 -eq 3 ]]; then
+        # trim start and end
+        trimmed_string="${string#"${string%%[![:space:]]*}"}"
+        trimmed_string="${trimmed_string%"${trimmed_string##*[![:space:]]}"}"
+    fi
+    echo $trimmed_string
 }
 
+# Custom Info
+manufacturer () {
+    echo "Model:    $(command lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
+}
+
+
 username () {
-    command uname "$@"
-    echo "$?"
+    echo "Username: $(command whoami)"
 }
 
 kernalname () {
-    command uname -r "$@"
-    echo "$?"
+    echo "Kernal:   $(command uname -r)"
+}
+
+distribution_description () {
+    lsb_release -a
 }
 
 alias vi="vim"
@@ -151,6 +171,9 @@ clear
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 export PATH=$PATH:$JAVA_HOME/bin
 
+export JDTLS_HOME=/usr/local/bin/jdtls
+export PATH=$PATH:$JDTLS_HOME/bin
+
 export M2_HOME=/usr/local/apache-maven
 export M2=$M2_HOME/bin
 export PATH=$M2:$PATH
@@ -161,3 +184,6 @@ export PATH=$M2:$PATH
 # My Custom neofetch substitution
 username
 manufacturer
+kernalname
+distribution_description
+
