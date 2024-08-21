@@ -138,20 +138,20 @@ trimstring () {
 
 # Custom Info
 manufacturer () {
-    echo "Model:    $(command lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
+    echo "Model:        $(command lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
 }
 
 
 username () {
-    echo "Username: $(command whoami)"
+    echo "Username:     $(command whoami)"
 }
 
 kernalname () {
-    echo "Kernal:   $(command uname -r)"
+    echo "Kernal:       $(command uname -r)"
 }
 
 distribution_description () {
-    lsb_release -a
+    command echo "Distribution: $(cat /etc/issue.net)" || echo "$(lsb_release -a)"
 }
 
 alias vi="vim"
@@ -186,4 +186,3 @@ username
 manufacturer
 kernalname
 distribution_description
-
