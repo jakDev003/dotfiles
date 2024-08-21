@@ -33,6 +33,7 @@ render = "all"
 y = [":clipboard-yank", "yank"]
 p = [":clipboard-paste-before"]
 F = ["file_picker_in_current_buffer_directory"]
+f = ["file_picker"]
 
 [editor.statusline]
 left = ["mode", "spinner", "version-control"]
