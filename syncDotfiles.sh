@@ -47,6 +47,9 @@ if [[ $gs ]]; then
   echo "push";
 fi
 
+# Change file permissions
+sudo chown josh:josh . -R
+
 # push to Github
 git add --all
 git commit -m "Updated: `date +'%Y-%m-%d %H:%M:%S'`"
