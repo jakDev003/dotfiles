@@ -67,7 +67,8 @@ end
 
 
 -- Set Theme
-config.color_scheme = '3024 (dark) (terminal.sexy)'
+-- config.color_scheme = '3024 (dark) (terminal.sexy)'
+config.color_scheme = 'batman'
 config.font = wezterm.font {
 	family = 'JetBrainsMono Nerd Font',
 }

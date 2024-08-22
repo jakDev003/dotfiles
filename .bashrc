@@ -118,42 +118,6 @@ fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# Utilities
-trimstring () {
-    string=$1
-    trimmed_string=$string
-    if [[ $2 -eq 1 ]]; then
-        # trim start
-        trimmed_string="${string#"${string%%[![:space:]]*}"}"
-    elif [[ $2 -eq 2 ]]; then
-        # trim end
-        trimmed_string="${string%"${string##*[![:space:]]}"}"
-    elif [[ $2 -eq 3 ]]; then
-        # trim start and end
-        trimmed_string="${string#"${string%%[![:space:]]*}"}"
-        trimmed_string="${trimmed_string%"${trimmed_string##*[![:space:]]}"}"
-    fi
-    echo $trimmed_string
-}
-
-# Custom Info
-manufacturer () {
-    echo "Model:        $(command lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
-}
-
-
-username () {
-    echo "Username:     $(command whoami)"
-}
-
-kernalname () {
-    echo "Kernal:       $(command uname -r)"
-}
-
-distribution_description () {
-    command echo "$(grep -E -w 'VERSION|NAME|PRETTY_NAME' /etc/os-release)" || echo "Distribution: $(cat /etc/issue.net)" || echo "$(lsb_release -a)"
-}
-
 alias vi="vim"
 
 # Install Starship if not found
@@ -167,22 +131,13 @@ clear
 #export JAVA_HOME=/usr/lib/jvm/java
 #export JRE_HOME=/usr/lib/jvm/jre
 #export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
-#export JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+export JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
 export PATH=$PATH:$JAVA_HOME/bin
-
-export JDTLS_HOME=/usr/local/bin/jdtls
-export PATH=$PATH:$JDTLS_HOME/bin
 
 export M2_HOME=/usr/local/apache-maven
 export M2=$M2_HOME/bin
 export PATH=$M2:$PATH
 
-. "$HOME/.cargo/env"
+#neofetch
+fastfetch
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# My Custom neofetch substitution
-username
-manufacturer
-kernalname
-distribution_description

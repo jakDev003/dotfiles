@@ -32,8 +32,7 @@ render = "all"
 # Use system clipboard
 y = [":clipboard-yank", "yank"]
 p = [":clipboard-paste-before"]
-F = ["file_picker_in_current_buffer_directory"]
-f = ["file_picker"]
+d = { d = ["extend_line_below", "delete_selection"] }
 
 [editor.statusline]
 left = ["mode", "spinner", "version-control"]
@@ -43,3 +42,4 @@ separator = "│"
 mode.normal = "N"
 mode.insert = "I"
 mode.select = "S"
+
