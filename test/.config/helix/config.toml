@@ -1,0 +1,45 @@
+#theme = "tokyonight_storm"
+#theme = "ayu_dark"
+theme = "heisenberg"
+
+
+[editor]
+mouse = true
+line-number = "relative"
+true-color = true
+gutters = ["diff", "diagnostics", "line-numbers", "spacer"]
+bufferline = "always"
+auto-format = true
+
+[editor.file-picker]
+hidden = false
+parents = false
+git-ignore = false
+
+[editor.indent-guides]
+render = true
+character = "╎"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.whitespace]
+render = "all"
+
+[keys.normal]
+# Use system clipboard
+y = [":clipboard-yank", "yank"]
+p = [":clipboard-paste-before"]
+F = ["file_picker_in_current_buffer_directory"]
+f = ["file_picker"]
+
+[editor.statusline]
+left = ["mode", "spinner", "version-control"]
+center = ["read-only-indicator", "file-name", "file-modification-indicator"]
+right = ["diagnostics", "selections", "position", "file-encoding", "file-type"]
+separator = "│"
+mode.normal = "N"
+mode.insert = "I"
+mode.select = "S"
