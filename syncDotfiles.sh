@@ -34,9 +34,23 @@ git pull
 sudo rsync -ah --progress $HOME/.config .
 
 # copy other dot files 
-sudo cp  $HOME/.vimrc .
-sudo cp  $HOME/.wezterm.lua .
-sudo cp  $HOME/.bashrc .
+FILE=$HOME/.vimrc
+if test -f "$FILE"; then
+    sudo cp  $FILE .
+fi
+FILE=$HOME/.wezterm.lua
+if test -f "$FILE"; then
+    sudo cp  $FILE .
+fi
+FILE=$HOME/.bashrc
+if test -f "$FILE"; then
+    sudo cp  $FILE .
+
+    # remove secrets from .bashrc
+    grep -v "export NEXUS" .bashrc > tmpfile && mv -f tmpfile .bashrc
+    grep -v "export ACCESS_KEY" .bashrc > tmpfile && mv -f tmpfile .bashrc
+    grep -v "export SECRET_KEY" .bashrc > tmpfile && mv -f tmpfile .bashrc
+fi
 
 # Check git status
 gs="$(git status | grep -i "modified")"
@@ -48,9 +62,9 @@ if [[ $gs ]]; then
 fi
 
 # Change file permissions
-sudo chown josh:josh . -R
+sudo chown $USER . -R
 
 # push to Github
 git add --all
 git commit -m "Updated: `date +'%Y-%m-%d %H:%M:%S'`"
-git push --force origin master
+git push
