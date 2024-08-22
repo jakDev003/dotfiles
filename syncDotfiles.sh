@@ -48,6 +48,6 @@ if [[ $gs ]]; then
 fi
 
 # push to Github
-git add .
+git add --all
 git commit -m "Updated: `date +'%Y-%m-%d %H:%M:%S'`"
-git push origin master
+git push --force origin master
