@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "kind": "CloudSettings",
+  "body": {
+    "tabnine_cloud_host": null,
+    "tabnine_cloud_certificate_domain": null,
+    "tabnine_cloud_port": null,
+    "api_key": "MAGIC_asmcleqmcqinvdosvcoxnxoaiajdoixcmkzsqwfpjidosf",
+    "jwt": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlMzcxNzMwZWY4NmViYTI5YTUyMTJkOWI5NmYzNjc1NTA0ZjYyYmMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiSm9zaCBLIiwicGljdHVyZSI6Imh0dHBzOi8vYXZhdGFycy5naXRodWJ1c2VyY29udGVudC5jb20vdS81ODcwMDEzMD92PTQiLCJ0ZWFtcyI6W3sidGVhbUlkIjoiMzkxNGY0MTktNzAyYy00ZTJkLWIzZjktYjdkNDQwZmM0MmE0IiwiaXNBZG1pbiI6dHJ1ZX1dLCJvcmdhbml6YXRpb25JZCI6bnVsbCwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3RhYm5pbmUtYXV0aC0zNDAwMTUiLCJhdWQiOiJ0YWJuaW5lLWF1dGgtMzQwMDE1IiwiYXV0aF90aW1lIjoxNzIzNDczMTQzLCJ1c2VyX2lkIjoiOTc2ZTZhZTUtNjQxMS00YTQ1LTgxYzEtYjNmZGZiYTkzNTdhIiwic3ViIjoiOTc2ZTZhZTUtNjQxMS00YTQ1LTgxYzEtYjNmZGZiYTkzNTdhIiwiaWF0IjoxNzIzNjUzNTk1LCJleHAiOjE3MjM2NTcxOTUsImVtYWlsIjoiamFrX2RldkBvdXRsb29rLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImdpdGh1Yi5jb20iOlsiNTg3MDAxMzAiXSwiZW1haWwiOlsiamFrX2RldkBvdXRsb29rLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6ImN1c3RvbSJ9fQ.jj9X6B1VDjNOMrLn6mxvEPosEwG-7xfpoUqdmW6MXxLKI-cpr9jlKiX4HIB1_ao_J1ooK-ZmmNkVzVhX4chOGZdSSwgw3omF00z68S9TfzPS2R3wE9L9qkkvi96T6v4qoAecDRe5EZ9uEtY-eJmMlrSMJ8i7b0YH1xWapf-YijnehzVmjdmLhPCigQIqIBI7MEn4JopEZtpTkeTb714f-e7LCKvhebr1eN4qZJjwqKOYXVdY8fIphZb452zRps35tWA7UwtQRZHJ65A_LR7a3fSAMQArxiWJhaJa1GlQTRywlkVgA6Gop7AbNJCnsw3trwcupzNhjoxsA1rZSsAiOQ",
+    "cloud_whitelist": [],
+    "hosted_deep_completions_enabled": "Disabled",
+    "deep_completions_work_mode": "Hybrid",
+    "omit_prefix_suggestions": false
+  }
+}
