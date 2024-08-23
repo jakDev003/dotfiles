@@ -142,6 +142,31 @@ show_my_info () {
 
 alias vi="vim"
 
+packagesNeeded=(curl wget unzip zip)
+if [ -x "$(command -v apk)" ];
+then
+    sudo apk add --no-cache "${packagesNeeded[@]}"
+elif [ -x "$(command -v apt-get)" ];
+then
+    sudo apt-get install "${packagesNeeded[@]}"
+elif [ -x "$(command -v dnf)" ];
+then
+    sudo dnf install "${packagesNeeded[@]}"
+elif [ -x "$(command -v zypper)" ];
+then
+    sudo zypper install "${packagesNeeded[@]}"
+else
+    echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: "${packagesNeeded[@]}"">&2;
+fi
+
+# Install SDKMan if not found ( For Java )
+if [[ $(whereis sdk) == *sdk* ]]; then
+    curl -s "https://get.sdkman.io" | bash -s -- -y
+    sdk install ant
+    sdk install java
+    sdk install maven
+fi
+
 # Install Starship if not found
 if [[ $(whereis starship) == *starship* ]]; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash -s -- -y
