@@ -163,8 +163,10 @@ fi
 # Install SDKMan if not found ( For Java )
 if [[ $(whereis sdk) == *sdk* ]]; then
     curl -s "https://get.sdkman.io" | bash -s -- -y
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
     sdk install ant
-    sdk install java
+    sdk install java 21.0.4-tem
+    sdk install java 8.0.422-tem
     sdk install maven
 fi
 
