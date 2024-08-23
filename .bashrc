@@ -127,7 +127,7 @@ show_my_info () {
     
     printf "\n"
     printf "   %s\n" "IP ADDR: $output"
-    printf "   %s\n" "USER: $(echo $USER)"
+    printf "   %s\n" "USER: $(whoami)"
     printf "   %s\n" "DATE: $(date)"
     printf "   %s\n" "UPTIME: $(uptime -p)"
     printf "   %s\n" "HOSTNAME: $(hostname -f)"
