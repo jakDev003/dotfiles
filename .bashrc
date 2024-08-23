@@ -143,27 +143,31 @@ show_my_info () {
 
 alias vi="vim"
 
-packagesNeeded=(curl wget unzip zip)
-if [ -x "$(command -v apk)" ];
-then
-    sudo apk add --no-cache "${packagesNeeded[@]}"
-elif [ -x "$(command -v apt-get)" ];
-then
-    sudo apt-get install "${packagesNeeded[@]}"
-elif [ -x "$(command -v dnf)" ];
-then
-    sudo dnf install "${packagesNeeded[@]}"
-elif [ -x "$(command -v zypper)" ];
-then
-    sudo zypper install "${packagesNeeded[@]}"
-else
-    echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: "${packagesNeeded[@]}"">&2;
-fi
+
 
 # Install SDKMan if not found ( For Java )
-if [[ $(whereis sdk) == *sdk* ]]; then
+if [[  $(source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk version) == *sdk* ]]; then
+    # Install required packages
+    packagesNeeded=(curl wget unzip zip)
+    if [ -x "$(command -v apk)" ];
+    then
+        sudo apk add --no-cache "${packagesNeeded[@]}"
+    elif [ -x "$(command -v apt-get)" ];
+    then
+        sudo apt-get install "${packagesNeeded[@]}"
+    elif [ -x "$(command -v dnf)" ];
+    then
+        sudo dnf install "${packagesNeeded[@]}"
+    elif [ -x "$(command -v zypper)" ];
+    then
+        sudo zypper install "${packagesNeeded[@]}"
+    else
+        echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: "${packagesNeeded[@]}"">&2;
+    fi
+    # Install SDK Man
     curl -s "https://get.sdkman.io" | bash -s -- -y
     source "$HOME/.sdkman/bin/sdkman-init.sh"
+    # Install Java Stuff
     sdk install ant
     sdk install java 21.0.4-tem
     sdk install java 8.0.422-tem
