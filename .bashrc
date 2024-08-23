@@ -132,6 +132,7 @@ show_my_info () {
     printf "   %s\n" "UPTIME: $(uptime -p)"
     printf "   %s\n" "HOSTNAME: $(hostname -f)"
     printf "   %s\n" "MODEL: $(command lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
+    printf "   %s\n" "DISTRO: $(cat /etc/*-release | grep "PRETTY_NAME" | sed 's/.*=//')"
     #printf "   %s\n" "CPU: $(awk -F: '/model name/{print $2}' | head -1)"
     printf "   %s\n" "KERNEL: $(uname -rms)"
     printf "   %s\n" "PACKAGES: $(dpkg --get-selections | wc -l)"
