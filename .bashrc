@@ -196,4 +196,4 @@ export PATH=$M2:$PATH
 # My Custom neofetch substitution
 show_my_info
 
-
+source "$HOME/.sdkman/bin/sdkman-init.sh"
