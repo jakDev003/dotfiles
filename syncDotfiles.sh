@@ -31,7 +31,7 @@ fi
 git pull
 
 # copy .config
-sudo rsync -ah --progress $HOME/.config .
+sudo rsync -ah --exclude "$(HOME)/.config/helix/runtime" --progress $HOME/.config .
 
 # copy other dot files 
 FILE=$HOME/.vimrc
