@@ -1,50 +1,3 @@
-
-[[language]]
-name = "typescript"
-language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
-formatter = { command = 'prettier', args = ["--parser", "typescript"] }
-auto-format = true
-
-[[language]]
-name = "tsx"
-language-servers = [ "eslint", "emmet-ls" ]
-formatter = { command = 'prettier', args = ["--parser", "typescript"] }
-auto-format = true
-
-[[language]]
-name = "javascript"
-language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
-formatter = { command = 'prettier', args = ["--parser", "javascript"] }
-auto-format = true
-
-[[language]]
-name = "jsx"
-language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
-formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
-auto-format = true
-
-[[language]]
-name = "json"
-formatter = { command = "prettier", args = [ "--parser", "json" ] }
-auto-format = true
-
-[[language]]
-name = "html"
-language-servers = [ "vscode-html-language-server", "emmet-ls" ]
-formatter = { command = 'prettier', args = ["--parser", "html"] }
-auto-format = true
-
-[[language]]
-name = "css"
-language-servers = [ "vscode-css-language-server", "emmet-ls" ]
-formatter = { command = 'prettier', args = ["--parser", "css"] }
-auto-format = true
-
-[[language]]
-name = "yaml"
-formatter = { command = 'prettier', args = ["--parser", "yaml"] }
-auto-format = true
-
 [language-server.eslint]
 command = "vscode-eslint-language-server"
 args = ["--stdio"]
@@ -73,3 +26,64 @@ css = { validate = { enable = true } }
 scss = { validate = { enable = true } }
 less = { validate = { enable = true } }
 provideFormatter = true
+
+[language-server.jdtls]
+command = "sdk use java 21.0.4-tem && jdtls"
+args = ["--jvm-arg=-javaagent:/usr/local/bin/lombok/lombok.jar"]
+
+[[language]]
+name = "java"
+scope = "source.java"
+injection-regex = "java"
+file-types = ["java"]
+roots = ["pom.xml", "build.gradle", ]
+indent = { tab-width = 4, unit = "    " }
+language-servers = [ "jdtls" ]
+formatter = { command = "google-java-format", args = ["-"] }
+auto-format = false
+
+[[language]]
+name = "typescript"
+language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
+formatter = { command = 'prettier', args = ["--parser", "typescript"] }
+auto-format = false
+
+[[language]]
+name = "tsx"
+language-servers = [ "eslint", "emmet-ls" ]
+formatter = { command = 'prettier', args = ["--parser", "typescript"] }
+auto-format = false
+
+[[language]]
+name = "javascript"
+language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
+formatter = { command = 'prettier', args = ["--parser", "javascript"] }
+auto-format = false
+
+[[language]]
+name = "jsx"
+language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
+formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
+auto-format = false
+
+[[language]]
+name = "json"
+formatter = { command = "prettier", args = [ "--parser", "json" ] }
+auto-format = false
+
+[[language]]
+name = "html"
+language-servers = [ "vscode-html-language-server", "emmet-ls" ]
+formatter = { command = 'prettier', args = ["--parser", "html"] }
+auto-format = false
+
+[[language]]
+name = "css"
+language-servers = [ "vscode-css-language-server", "emmet-ls" ]
+formatter = { command = 'prettier', args = ["--parser", "css"] }
+auto-format = false
+
+[[language]]
+name = "yaml"
+formatter = { command = 'prettier', args = ["--parser", "yaml"] }
+auto-format = false
