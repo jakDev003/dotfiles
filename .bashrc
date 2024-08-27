@@ -189,14 +189,22 @@ clear
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 export PATH=$PATH:$JAVA_HOME/bin
 
+# JDTL
 export JDTLS_HOME=/usr/local/bin/jdtls
 export PATH=$PATH:$JDTLS_HOME/bin
 
+# MAVEN
 export M2_HOME=/usr/local/apache-maven
 export M2=$M2_HOME/bin
 export PATH=$M2:$PATH
 
+# CARGO
 . "$HOME/.cargo/env"
+
+# Google Java Format
+export PATH=$PATH:/usr/local/bin/googleJavaFormat
+
+# NVM
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # My Custom neofetch substitution
