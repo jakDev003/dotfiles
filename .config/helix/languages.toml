@@ -28,8 +28,11 @@ less = { validate = { enable = true } }
 provideFormatter = true
 
 [language-server.jdtls]
-command = "sdk use java 21.0.4-tem && jdtls"
-args = ["--jvm-arg=-javaagent:/usr/local/bin/lombok/lombok.jar"]
+command = "jdtls"
+args = [
+  "--java-executable=/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+  "--jvm-arg=-javaagent:/usr/local/bin/lombok/lombok.jar"
+]
 
 [[language]]
 name = "java"

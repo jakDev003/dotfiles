@@ -43,3 +43,7 @@ separator = "│"
 mode.normal = "N"
 mode.insert = "I"
 mode.select = "S"
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
