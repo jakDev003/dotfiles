@@ -91,7 +91,6 @@ name = "yaml"
 formatter = { command = 'prettier', args = ["--parser", "yaml"] }
 auto-format = false
 
-[[language]]
-name = "c-sharp"
-formatter = { command = "omnisharp" }
-auto-format = true
+[language-server.omnisharp]
+command = "dotnet"
+args = [ "/usr/local/bin/OmniSharp/OmniSharp.dll", "--languageserver" ]

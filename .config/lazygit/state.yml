@@ -1,9 +1,15 @@
 lastupdatecheck: 0
 recentrepos:
-- /home/dev/dotfiles
-- /home/dev/scripts
-- /home/dev/run_env
+    - /home/josh/GitRepos/dotfiles
+    - /home/josh/GitRepos/archangel
 startuppopupversion: 5
+lastversion: 0.43.1
 customcommandshistory: []
 hidecommandlog: false
 ignorewhitespaceindiffview: false
+diffcontextsize: 3
+renamesimilaritythreshold: 50
+localbranchsortorder: recency
+remotebranchsortorder: alphabetical
+gitlogorder: topo-order
+gitlogshowgraph: always

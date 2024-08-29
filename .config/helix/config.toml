@@ -1,6 +1,7 @@
 #theme = "tokyonight_storm"
 #theme = "ayu_dark"
-theme = "heisenberg"
+#theme = "heisenberg"
+theme = "catppuccin_mocha"
 
 
 [editor]
