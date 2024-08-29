@@ -21,9 +21,12 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 
+			-- Additional for java
+			{ "nvim-java/nvim-java", opts = {} },
+
 			-- Useful status updates for LSP.
 			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-			{ "j-hui/fidget.nvim", opts = {} },
+			--{ "j-hui/fidget.nvim", opts = {} }, -- This is being handled by Noice at the moment
 
 			-- Allows extra capabilities provided by nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",
@@ -86,7 +89,34 @@ return {
 
 			local servers = {
 				pyright = {},
-				tsserver = {},
+				marksman = {},
+				stylelint = {},
+				angularls = {},
+				cssls = {},
+				eslint = {},
+				html = {},
+				jdtls = {
+					settings = {
+						java = {
+							configuration = {
+								runtimes = {
+									{
+										name = "JavaSE-21",
+										path = "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+										default = true,
+									}
+								}
+							}
+						}
+					}
+				},
+				tsserver = {
+					init_options = {
+						preferences = {
+							disableSuggestions = true
+						}
+					}
+				},
 				lua_ls = {
 					-- cmd = {...},
 					-- filetypes = { ...},
