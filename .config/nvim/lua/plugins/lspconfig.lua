@@ -1,251 +1,349 @@
 return {
 	{
-		"williamboman/mason.nvim",
-
-		config = function()
-			require("mason").setup({
-				ui = {
-					icons = {
-						package_installed = "✓",
-						package_pending = "➜",
-						package_uninstalled = "✗",
+		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+		-- used for completion, annotations and signatures of Neovim apis
+		"folke/lazydev.nvim",
+		ft = "lua",
+		opts = {
+			library = {
+				-- Load luvit types when the `vim.uv` word is found
+				{ path = "luvit-meta/library", words = { "vim%.uv" } },
+			},
+		},
+	},
+	{ "Bilal2453/luvit-meta", lazy = true },
+	{
+		-- Main LSP Configuration
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			-- Automatically install LSPs and related tools to stdpath for Neovim
+			{
+				"williamboman/mason.nvim",
+				opts = {
+					registries = {
+						"github:nvim-java/mason-registry",
+						"github:mason-org/mason-registry",
 					},
 				},
-			})
-		end,
-	},
+			},
+			"williamboman/mason-lspconfig.nvim",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
 
-	{
-		"neovim/nvim-lspconfig",
+			-- Useful status updates for LSP.
+			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+			--{ "j-hui/fidget.nvim", opts = {} }, -- This is being handled by Noice at the moment
 
+			-- Allows extra capabilities provided by nvim-cmp
+			"hrsh7th/cmp-nvim-lsp",
+
+			-- Java Stuff
+			"nvim-java/nvim-java",
+			"nvim-java/lua-async-await",
+			"nvim-java/nvim-java-core",
+			"nvim-java/nvim-java-test",
+			"nvim-java/nvim-java-dap",
+			"MunifTanjim/nui.nvim",
+			"neovim/nvim-lspconfig",
+			"mfussenegger/nvim-dap",
+		},
 		config = function()
-			local lspconfig = require("lspconfig")
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("jak-lsp-attach", { clear = true }),
+				callback = function(event)
+					local map = function(keys, func, desc, mode)
+						mode = mode or "n"
+						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+					end
+					map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+					map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+					map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+					map(
+						"<leader>ws",
+						require("telescope.builtin").lsp_dynamic_workspace_symbols,
+						"[W]orkspace [S]ymbols"
+					)
+					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
+					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-			-- Needed for html lang server
-			capabilities.textDocument.completion.completionItem.snippetSupport = true
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
+					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+						local highlight_augroup = vim.api.nvim_create_augroup("jak-lsp-highlight", { clear = false })
+						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+							buffer = event.buf,
+							group = highlight_augroup,
+							callback = vim.lsp.buf.document_highlight,
+						})
 
-            -- npm i -g bash-language-server
-			lspconfig.bashls.setup({
-				capabilities = capabilities,
+						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+							buffer = event.buf,
+							group = highlight_augroup,
+							callback = vim.lsp.buf.clear_references,
+						})
+
+						vim.api.nvim_create_autocmd("LspDetach", {
+							group = vim.api.nvim_create_augroup("jak-lsp-detach", { clear = true }),
+							callback = function(event2)
+								vim.lsp.buf.clear_references()
+								vim.api.nvim_clear_autocmds({ group = "jak-lsp-highlight", buffer = event2.buf })
+							end,
+						})
+					end
+					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+						map("<leader>th", function()
+							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+						end, "[T]oggle Inlay [H]ints")
+					end
+				end,
 			})
 
-            -- npm i -g css-variables-language-server
-			lspconfig.css_variables.setup({
-				capabilities = capabilities,
-			})
+			require("java").setup()
 
-            -- npm i -g vscode-langservers-extracted
-            lspconfig.cssls.setup({
-                capabilities = capabilities,
-            })
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-            -- npm i -g @microsoft/compose-language-service
-			lspconfig.docker_compose_language_service.setup({
-				capabilities = capabilities,
-			})
-
-            -- npm i -g dockerfile-language-server-nodejs
-			lspconfig.dockerls.setup({
-				capabilities = capabilities,
-				settings = {
-					docker = {
-						languageserver = {
-							formatter = {
-								--ignoreMultilineInstructions = true,
+			local servers = {
+				pyright = {},
+				marksman = {},
+				stylelint = {},
+				angularls = {},
+				cssls = {},
+				eslint = {},
+				html = {},
+				jdtls = {
+					settings = {
+						java = {
+							configuration = {
+								runtimes = {
+									{
+										name = "JavaSE-21",
+										path = "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+										default = true,
+									},
+								},
 							},
 						},
 					},
 				},
-			})
-
-            -- npm i -g @olrtg/emmet-language-server
-			lspconfig.emmet_language_server.setup({
-				capabilities = capabilities,
-			})
-
-            -- npm i -g emmet-ls
-			lspconfig.emmet_ls.setup({
-				capabilities = capabilities,
-			})
-
-			-- npm i -g vscode-langservers-extracted
-			lspconfig.eslint.setup({
-				capabilities = capabilities,
-				on_attach = function(client, bufnr)
-					vim.api.nvim_create_autocmd("BufWritePre", {
-						buffer = bufnr,
-						command = "EslintFixAll",
-					})
-				end,
-			})
-
-			-- npm i -g vscode-langservers-extracted
-			lspconfig.html.setup({
-				capabilities = capabilities,
-			})
-
-            -- https://projects.eclipse.org/projects/eclipse.jdt.ls
-			lspconfig.jdtls.setup({
-				cmd = { "jdtls --java-executable=/usr/lib/jvm/java-21/openjdk-amd64/bin/java" },
-				capabilities = capabilities,
-			})
-
-			-- https://luals.github.io/#other-install
-			lspconfig.lua_ls.setup({
-				settings = {
-					Lua = {
-						diagnostics = {
-							globals = { "vim" },
+				tsserver = {
+					init_options = {
+						preferences = {
+							disableSuggestions = true,
 						},
 					},
 				},
-
-				capabilities = capabilities,
-			})
-
-			-- https://github.com/artempyanykh/marksman/blob/main/docs/install.md
-			lspconfig.marksman.setup({})
-
-			-- pip install nginx-language-server
-			--lspconfig.nginx-language-server.setup({})
-
-			-- https://github.com/omnisharp/omnisharp-roslyn
-			lspconfig.omnisharp.setup({
-				cmd = { "dotnet", "/usr/local/bin/OmniSharp/OmniSharp.dll" },
-				capabilities = capabilities,
-				settings = {
-					FormattingOptions = {
-						-- Enables support for reading code style, naming convention and analyzer
-						-- settings from .editorconfig.
-						EnableEditorConfigSupport = true,
-						-- Specifies whether 'using' directives should be grouped and sorted during
-						-- document formatting.
-						OrganizeImports = nil,
-					},
-					MsBuild = {
-						-- If true, MSBuild project system will only load projects for files that
-						-- were opened in the editor. This setting is useful for big C# codebases
-						-- and allows for faster initialization of code navigation features only
-						-- for projects that are relevant to code that is being edited. With this
-						-- setting enabled OmniSharp may load fewer projects and may thus display
-						-- incomplete reference lists for symbols.
-						LoadProjectsOnDemand = nil,
-					},
-					RoslynExtensionsOptions = {
-						-- Enables support for roslyn analyzers, code fixes and rulesets.
-						EnableAnalyzersSupport = nil,
-						-- Enables support for showing unimported types and unimported extension
-						-- methods in completion lists. When committed, the appropriate using
-						-- directive will be added at the top of the current file. This option can
-						-- have a negative impact on initial completion responsiveness,
-						-- particularly for the first few completion sessions after opening a
-						-- solution.
-						EnableImportCompletion = nil,
-						-- Only run analyzers against open files when 'enableRoslynAnalyzers' is
-						-- true
-						AnalyzeOpenDocumentsOnly = nil,
-					},
-					Sdk = {
-						-- Specifies whether to include preview versions of the .NET SDK when
-						-- determining which version to use for project loading.
-						IncludePrereleases = true,
+				lua_ls = {
+					-- cmd = {...},
+					-- filetypes = { ...},
+					-- capabilities = {},
+					settings = {
+						Lua = {
+							completion = {
+								callSnippet = "Replace",
+							},
+							-- diagnostics = { disable = { 'missing-fields' } },
+						},
 					},
 				},
+			}
+
+			-- Ensure the servers and tools above are installed
+			--  To check the current status of installed tools and/or manually install
+			--  other tools, you can run
+			--    :Mason
+			--
+			require("mason").setup()
+
+			local ensure_installed = vim.tbl_keys(servers or {})
+			vim.list_extend(ensure_installed, {
+				"stylua",
 			})
+			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-            -- pip install python-lsp-server
-            lspconfig.pylsp.setup({
-                settings = {
-                    pylsp = {
-                        plugins = {
-                            pycodestyle = {
-                                ignore = {'W391'},
-                                maxLineLength = 100
-                            }
-                        }
-                    }
-                }
-            })
-
-            -- pip install pyright (or 'pip install pylance' which includes pyright)
-			-- can also use 'npm i -g pyright'
-            lspconfig.pyright.setup({
-				capabilities = capabilities,
+			require("mason-lspconfig").setup({
+				handlers = {
+					function(server_name)
+						local server = servers[server_name] or {}
+						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+						require("lspconfig")[server_name].setup(server)
+					end,
+				},
 			})
-
-            -- npm i -g typescript typescript-language-server
-            -- this should honor the tsconfig.json or jsconfig.json project files
-            lspconfig.tsserver.setup({})
-
-			vim.keymap.set("n", "<leader>ft", vim.lsp.buf.format, {})
 		end,
 	},
 
-	{
-		"https://github.com/hrsh7th/cmp-nvim-lsp",
+	{ -- Autoformat
+		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
+		cmd = { "ConformInfo" },
+		keys = {
+			{
+				"<leader>f",
+				function()
+					require("conform").format({ async = true, lsp_format = "fallback" })
+				end,
+				mode = "",
+				desc = "[F]ormat buffer",
+			},
+		},
+		opts = {
+			notify_on_error = false,
+			format_on_save = function(bufnr)
+				local disable_filetypes = { c = true, cpp = true }
+				local lsp_format_opt
+				if disable_filetypes[vim.bo[bufnr].filetype] then
+					lsp_format_opt = "never"
+				else
+					lsp_format_opt = "fallback"
+				end
+				return {
+					timeout_ms = 500,
+					lsp_format = lsp_format_opt,
+				}
+			end,
+			formatters_by_ft = { -- You can use 'stop_after_first' to run the first available formatter from the list
+				lua = { "stylua" },
+				python = { "isort", "black", stop_after_first = true },
+				javascript = { "prettierd", "prettier", stop_after_first = true },
+			},
+		},
 	},
 
+	-- AI Autocompletion
 	{
+		"codota/tabnine-nvim",
+		--build = "./dl_binaries.sh",
+		build = function()
+			-- Replace vim.uv with vim.loop if using NVIM 0.9.0 or below
+			if vim.loop.os_uname().sysname == "Windows_NT" then
+				return "pwsh.exe -file .\\dl_binaries.ps1"
+			else
+				return "./dl_binaries.sh"
+			end
+		end,
+		config = function()
+			require("tabnine").setup({
+				disable_auto_comment = true,
+				accept_keymap = "<Tab>",
+				dismiss_keymap = "<C-]>",
+				debounce_ms = 800,
+				suggestion_color = { gui = "#808080", cterm = 244 },
+				exclude_filetypes = { "TelescopePrompt", "NvimTree" },
+				log_file_path = nil, -- absolute path to Tabnine log file
+				ignore_certificate_errors = false,
+			})
+		end,
+	},
+	{ -- Autocompletion
 		"hrsh7th/nvim-cmp",
-
+		event = "InsertEnter",
 		dependencies = {
-			"L3MON4D3/LuaSnip",
+			{
+				"L3MON4D3/LuaSnip",
+				build = (function()
+					if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
+						return
+					end
+					return "make install_jsregexp"
+				end)(),
+				dependencies = {
+					-- `friendly-snippets` contains a variety of premade snippets.
+					--    See the README about individual language/framework/plugin snippets:
+					--    https://github.com/rafamadriz/friendly-snippets
+					{
+						"rafamadriz/friendly-snippets",
+						config = function()
+							require("luasnip.loaders.from_vscode").lazy_load()
+						end,
+					},
+				},
+			},
 			"saadparwaiz1/cmp_luasnip",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-path",
 			"onsails/lspkind.nvim",
 		},
-
 		config = function()
+			-- See `:help cmp`
 			local cmp = require("cmp")
-			local lspkind = require("lspkind")
+			local luasnip = require("luasnip")
+			luasnip.config.setup({})
 
 			cmp.setup({
 				snippet = {
 					expand = function(args)
-						require("luasnip").lsp_expand(args.body)
+						luasnip.lsp_expand(args.body)
 					end,
 				},
-				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
-				},
+				completion = { completeopt = "menu,menuone,noinsert" },
+
 				mapping = cmp.mapping.preset.insert({
+					-- Scroll the documentation window [b]ack / [f]orward
 					["<C-b>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-e>"] = cmp.mapping.abort(),
+
+					-- If you prefer more traditional completion keymaps,
+					-- you can uncomment the following lines
 					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					["<Tab>"] = cmp.mapping.select_next_item(),
+					["<S-Tab>"] = cmp.mapping.select_prev_item(),
+
+					-- Manually trigger a completion from nvim-cmp.
+					--  Generally you don't need this, because nvim-cmp will display
+					--  completions whenever it has completion options available.
+					["<C-Space>"] = cmp.mapping.complete({}),
+
+					-- Think of <c-l> as moving to the right of your snippet expansion.
+					--  So if you have a snippet that's like:
+					--  function $name($args)
+					--    $body
+					--  end
+					--
+					-- <c-l> will move you to the right of each of the expansion locations.
+					-- <c-h> is similar, except moving you backwards.
+					["<C-l>"] = cmp.mapping(function()
+						if luasnip.expand_or_locally_jumpable() then
+							luasnip.expand_or_jump()
+						end
+					end, { "i", "s" }),
+					["<C-h>"] = cmp.mapping(function()
+						if luasnip.locally_jumpable(-1) then
+							luasnip.jump(-1)
+						end
+					end, { "i", "s" }),
+
+					-- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
+					--    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
 				}),
-				sources = cmp.config.sources({
+				sources = {
+					{
+						name = "lazydev",
+						-- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
+						group_index = 0,
+					},
 					{ name = "nvim_lsp" },
-				}, {
-					{ name = "buffer" },
-				}),
+					{ name = "luasnip" },
+					{ name = "path" },
+				},
 				formatting = {
-					format = lspkind.cmp_format({
-						mode = "symbol",
-						maxwidth = 50,
-						ellipsis_char = "...",
-						show_labelDetails = true,
+					fields = {},
+					expandable_indicator = true,
+					format = require("lspkind").cmp_format({
+						mode = "symbol", -- show only symbol annotations
+						maxwidth = function()
+							return math.floor(0.45 * vim.o.columns)
+						end,
+						ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+
+						-- The function below will be called before any actual modifications from lspkind
+						-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
 						before = function(entry, vim_item)
 							return vim_item
 						end,
 					}),
-				},
-			})
-		end,
-	},
-
-	{
-		"nvimtools/none-ls.nvim",
-
-		config = function()
-			local null_ls = require("null-ls")
-
-			null_ls.setup({
-				sources = {
-					null_ls.builtins.formatting.stylua,
-					null_ls.builtins.formatting.black,
 				},
 			})
 		end,
