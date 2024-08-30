@@ -67,6 +67,9 @@ vim.o.termguicolors = true
 
 vim.g.mapleader = " "
 
+-- Set font
+vim.opt.guifont = "JetBrainsMono Nerd Font"
+
 -- Winbar
 vim.o.winbar = "%{%v:lua.require'winbar'.eval()%}"
 
@@ -86,3 +89,10 @@ vim.keymap.set('n', '<leader>[+', '<cmd>vertical res +10<CR>', { desc = 'Window 
 vim.keymap.set('n', '<leader>[-', '<cmd>vertical res -10<CR>', { desc = 'Window [V]ertical Resize -' })
 vim.keymap.set('n', '<leader>]+', '<cmd>res +10<CR>', { desc = 'Window [H]orizontal Resize +' })
 vim.keymap.set('n', '<leader>]-', '<cmd>res -10<CR>', { desc = 'Window [H]orizontal Resize -' })
+
+vim.keymap.set("n", "<tab>", ":BufferNext<CR>")
+vim.keymap.set("n", "<S-tab>", ":BufferPrevious<CR>")
+vim.keymap.set("n", "<leader>x", ":BufferClose<CR>")
+
+vim.keymap.set("n", "<leader>tr", ":ToggleTerm<CR>")
+
