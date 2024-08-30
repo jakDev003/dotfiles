@@ -191,9 +191,6 @@ export PATH=$M2:$PATH
 # Google Java Format
 export PATH=$PATH:/usr/local/bin/googleJavaFormat
 
-# Omnisharp
-export PATH=$PATH:/usr/local/bin/OmniSharp/OmniSharp
-
 #NVM
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
