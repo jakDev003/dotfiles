@@ -1,6 +1,7 @@
 lastupdatecheck: 0
 recentrepos:
 - /home/dev/dotfiles
+- /home/dev/scripts
 startuppopupversion: 5
 customcommandshistory: []
 hidecommandlog: false
