@@ -3,7 +3,7 @@ vim.opt.wrap = false
 
 -- Line Numbers
 vim.opt.nu = true
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 vim.opt.numberwidth = 4
 
 -- Make sure when scrolling cursor does not go beyond the bottom 'x' number of lines
@@ -71,12 +71,16 @@ vim.opt.guifont = "JetBrainsMono Nerd Font"
 -- Winbar
 vim.o.winbar = "%{%v:lua.require'winbar'.eval()%}"
 
+-- Transparent Background
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	group = vim.api.nvim_create_augroup("jak-highlight-yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank()
 	end,
@@ -91,5 +95,3 @@ vim.keymap.set("n", "<leader>]-", "<cmd>res -10<CR>", { desc = "Window [H]orizon
 vim.keymap.set("n", "<tab>", ":BufferNext<CR>")
 vim.keymap.set("n", "<S-tab>", ":BufferPrevious<CR>")
 vim.keymap.set("n", "<leader>x", ":BufferClose<CR>")
-
-vim.keymap.set("n", "<leader>tr", ":ToggleTerm<CR>")
