@@ -41,4 +41,4 @@ sudo rsync -ah --progress .config/* $HOME_DIR/.config
 # copy other dot files 
 cp .vimrc $HOME_DIR/
 cp .wezterm.lua $HOME_DIR/
-cp .bashrc $HOME_DIR/
+sudo cp .bashrc $HOME_DIR/
