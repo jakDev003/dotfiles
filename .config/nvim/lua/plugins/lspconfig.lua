@@ -21,7 +21,7 @@ return {
 				"williamboman/mason.nvim",
 				opts = {
 					registries = {
-						"github:nvim-java/mason-registry",
+						--"github:nvim-java/mason-registry",
 						"github:mason-org/mason-registry",
 					},
 				},
@@ -34,13 +34,13 @@ return {
 			-- Allows extra capabilities provided by nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",
 
-			-- Java Stuff
-			"nvim-java/nvim-java",
-			"nvim-java/lua-async-await",
-			"nvim-java/nvim-java-core",
-			"nvim-java/nvim-java-test",
-			"nvim-java/nvim-java-dap",
-            "nvim-java/nvim-java-refactor",
+			---- Java Stuff
+			--"nvim-java/nvim-java",
+			--"nvim-java/lua-async-await",
+			--"nvim-java/nvim-java-core",
+			--"nvim-java/nvim-java-test",
+			--"nvim-java/nvim-java-dap",
+            --"nvim-java/nvim-java-refactor",
 			"MunifTanjim/nui.nvim",
 			"neovim/nvim-lspconfig",
 			"mfussenegger/nvim-dap",
@@ -98,7 +98,7 @@ return {
 				end,
 			})
 
-			require("java").setup()
+			--require("java").setup()
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
@@ -111,28 +111,28 @@ return {
 				cssls = {},
 				eslint = {},
 				html = {},
-				jdtls = {
-					settings = {
-						java = {
-							configuration = {
-								runtimes = {
-									{
-										name = "JavaSE-21",
-										path = "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
-										default = true,
-									},
-								},
-							},
-						},
-					},
-				},
-				tsserver = {
-					init_options = {
-						preferences = {
-							disableSuggestions = true,
-						},
-					},
-				},
+				-- jdtls = {
+				-- 	settings = {
+				-- 		java = {
+				-- 			configuration = {
+				-- 				runtimes = {
+				-- 					{
+				-- 						name = "JavaSE-21",
+				-- 						path = "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+				-- 						default = true,
+				-- 					},
+				-- 				},
+				-- 			},
+				-- 		},
+				-- 	},
+				-- },
+				-- tsserver = {
+				-- 	init_options = {
+				-- 		preferences = {
+				-- 			disableSuggestions = true,
+				-- 		},
+				-- 	},
+				-- },
 				lua_ls = {
 					-- cmd = {...},
 					-- filetypes = { ...},

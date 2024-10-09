@@ -9,6 +9,8 @@ return {
         highlight = { enable = true },
         indent = { enable = true },
       })
+
+            require("nvim-treesitter.install").prefer_git = true
     end
   }
 }
