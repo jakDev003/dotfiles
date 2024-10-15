@@ -38,7 +38,7 @@ vim.o.mouse = "a"
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.opt.clipboard = "unnamedplus"
+vim.opt.clipboard:append("unnamedplus")
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -68,6 +68,10 @@ vim.g.mapleader = " "
 -- Set font
 vim.opt.guifont = "JetBrainsMono Nerd Font"
 
+vim.diagnostic.config({
+	float = { border = "rounded" }, -- add border to diagnostic popups
+})
+
 -- Winbar
 vim.o.winbar = "%{%v:lua.require'winbar'.eval()%}"
 
@@ -87,15 +91,10 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Custom General Keymaps
-vim.keymap.set("n", "<leader>mww", "<cmd>res +2<CR>", { desc = "Increase split height" })
-vim.keymap.set("n", "<leader>maa", "<cmd>vertical res +2<CR>", { desc = "Increase split width" })
-vim.keymap.set("n", "<leader>mss", "<cmd>res -2<CR>", { desc = "Decrease split height" })
-vim.keymap.set("n", "<leader>mdd", "<cmd>vertical res -2<CR>", { desc = "Decrease split width" })
-
-vim.keymap.set("n", "<leader>mw", "<C-W><C-K><CR>", { desc = "Move to top split" })
-vim.keymap.set("n", "<leader>ma", "<C-W><C-H><CR>", { desc = "Move to left split" })
-vim.keymap.set("n", "<leader>ms", "<C-W><C-J><CR>", { desc = "Move to bottom split" })
-vim.keymap.set("n", "<leader>md", "<C-W><C-L><CR>", { desc = "Move to right split" })
+vim.keymap.set("n", "<leader>[+", "<cmd>vertical res +10<CR>", { desc = "Window [V]ertical Resize +" })
+vim.keymap.set("n", "<leader>[-", "<cmd>vertical res -10<CR>", { desc = "Window [V]ertical Resize -" })
+vim.keymap.set("n", "<leader>]+", "<cmd>res +10<CR>", { desc = "Window [H]orizontal Resize +" })
+vim.keymap.set("n", "<leader>]-", "<cmd>res -10<CR>", { desc = "Window [H]orizontal Resize -" })
 
 vim.keymap.set("n", "<tab>", ":BufferNext<CR>")
 vim.keymap.set("n", "<S-tab>", ":BufferPrevious<CR>")
