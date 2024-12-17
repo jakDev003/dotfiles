@@ -1,2 +1,4 @@
-*.json
-/node_modules
+tags
+test.sh
+.luarc.json
+nvim

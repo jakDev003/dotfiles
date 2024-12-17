@@ -39,7 +39,7 @@ return {
             local builtin = require("telescope.builtin")
             local themes = require("telescope.themes")
 
-            vim.keymap.set('n', '<leader>?', builtin.resume, { desc = '[?] Resume previous search' })
+            vim.keymap.set('n', '<leader>?', builtin.oldfiles, { desc = '[?] Find recently opened files' })
             vim.keymap.set('n', '<leader>/', function()
                 -- You can pass additional configuration to telescope to change theme, layout, etc.
                 builtin.current_buffer_fuzzy_find(themes.get_dropdown {
@@ -54,7 +54,7 @@ return {
             vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
             vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
             vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-            vim.keymap.set('n', '<leader>sr', builtin.oldfiles, { desc = '[S]earch [R]ecently Open Files' })
+            vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
             vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
             vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
             vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[S]how [B]uffers' })

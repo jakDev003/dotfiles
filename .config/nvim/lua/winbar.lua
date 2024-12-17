@@ -20,10 +20,24 @@ M.eval = function()
     local modified = vim.api.nvim_eval_statusline("%M", {}).str == '+' and ' ➕ ' or '   '
     local right_align = "%="
 
+    local get_lsp_client = function(msg)
+        msg = msg or 'No Active Lsp'
+        local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+        local clients = vim.lsp.get_active_clients()
+        if next(clients) == nil then
+            return msg
+        end
 
-    -- passing in 'null-ls' to ignore that client in the winbar
-    -- otherwise it will show most of the time
-    local lsp_client = require("utilities").get_lsp_client('null-ls')
+        for _, client in ipairs(clients) do
+            local filetypes = client.config.filetypes
+            if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+                return client.name
+            end
+        end
+        return msg
+    end
+
+    local lsp_client = get_lsp_client()
 
     local lsp_diag = function()
         local count = {}
