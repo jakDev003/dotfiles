@@ -137,8 +137,8 @@ show_my_info () {
     printf "   %s\n" "DISTRO: $(cat /etc/*-release | grep "PRETTY_NAME" | sed 's/.*=//')"
     printf "   %s\n" "KERNEL: $(uname -rms)"
     printf "   %s\n" "PACKAGES: $(get_packages_info)"
-    #printf "   %s\n" "RESOLUTION: $(xrandr | awk '/\*/{printf $1" "}')"
-    #printf "   %s\n" "MEMORY: $(free -m -h | awk '/Mem/{print $3"/"$2}')"
+    printf "   %s\n" "HARDDRIVE: $(df --total -B1 | awk '/total/ {printf "%.2f\n", $2 / (1024^3)}') GB"
+    printf "   %s\n" "MEMORY: $(awk '/MemTotal/ {printf "%.2f\n", $2 / 1024 / 1024}' /proc/meminfo) GB"
     printf "\n"
 }
 

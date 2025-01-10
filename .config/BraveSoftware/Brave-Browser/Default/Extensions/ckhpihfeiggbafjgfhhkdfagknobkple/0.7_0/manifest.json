@@ -1,0 +1,16 @@
+{
+   "action": {
+      "default_popup": "popup.html"
+   },
+   "devtools_page": "devtools.html",
+   "icons": {
+      "128": "icon128.png",
+      "48": "icon48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA50JmTJ35UJXorEosk9KX+37XPc0/LoTvYt9WFqCey/ivfRWl8DeaVhegIS1SEJw+piJiOVApoTJAoBJeV8r27T2f0H443QvHPvMO7eGdbFH0sQbxgYeVcDTYkbigkKjXpY6Xl5cxPZAc0Chn2ndGyaXy8FeT3b1GhQMIhSi6PzvaiXIRpcdtDIN1EmJ0LaF8mHIfLLfIHHMFjavVHfbO1DmB2stK03uGZnaXyv4hEqTHcrJEiRwp6UUPAQ4duwlYuEStW7cVPhpDKpyPoTd1oNLJe+jSePslYF460yaNVbK+bYarWhV6MXLNBHsd8QG/i48ppDGOHzeRezsMc054AQIDAQAB",
+   "manifest_version": 3,
+   "name": "Copy curl on windows",
+   "permissions": [ "clipboardWrite" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.7"
+}

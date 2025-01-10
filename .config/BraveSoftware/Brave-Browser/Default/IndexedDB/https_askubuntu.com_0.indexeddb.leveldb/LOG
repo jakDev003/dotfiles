@@ -1,0 +1,6 @@
+2025/01/09-21:26:34.236 eb9 Creating DB /home/josh/.config/BraveSoftware/Brave-Browser/Default/IndexedDB/https_askubuntu.com_0.indexeddb.leveldb since it was missing.
+2025/01/09-21:26:34.238 eb9 Reusing MANIFEST /home/josh/.config/BraveSoftware/Brave-Browser/Default/IndexedDB/https_askubuntu.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/01/09-21:26:34.242 ebb Level-0 table #5: started
+2025/01/09-21:26:34.243 ebb Level-0 table #5: 1311 bytes OK
+2025/01/09-21:26:34.244 ebb Delete type=0 #3
+2025/01/09-21:26:34.244 e4f Manual compaction at level-0 from '\x00\x01\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x02\x00\x00\x00' @ 0 : 0; will stop at (end)

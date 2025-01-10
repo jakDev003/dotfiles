@@ -1,0 +1,14 @@
+2025/01/09-21:58:32.885 1ed9 Reusing MANIFEST /home/josh/.config/BraveSoftware/Brave-Browser/Default/IndexedDB/https_github.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/01/09-21:58:32.885 1ed9 Recovering log #9
+2025/01/09-21:58:32.885 1ed9 Reusing old log /home/josh/.config/BraveSoftware/Brave-Browser/Default/IndexedDB/https_github.com_0.indexeddb.leveldb/000009.log 
+2025/01/09-21:58:32.885 1ed9 Delete type=2 #8
+2025/01/09-21:58:32.890 1f42 Level-0 table #14: started
+2025/01/09-21:58:32.891 1f42 Level-0 table #14: 942 bytes OK
+2025/01/09-21:58:32.892 1f42 Delete type=0 #9
+2025/01/09-21:58:32.892 1ed9 Manual compaction at level-0 from '\x00\x07\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at '\x00\x07\x00\x00\x05' @ 231 : 1
+2025/01/09-21:58:32.892 1ed9 Compacting 1@0 + 1@1 files
+2025/01/09-21:58:32.893 1ed9 Generated table #15@0: 28 keys, 806 bytes
+2025/01/09-21:58:32.893 1ed9 Compacted 1@0 + 1@1 files => 806 bytes
+2025/01/09-21:58:32.894 1ed9 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/01/09-21:58:32.894 1ed9 Delete type=2 #14
+2025/01/09-21:58:32.894 1ed9 Manual compaction at level-0 from '\x00\x07\x00\x00\x05' @ 231 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at (end)

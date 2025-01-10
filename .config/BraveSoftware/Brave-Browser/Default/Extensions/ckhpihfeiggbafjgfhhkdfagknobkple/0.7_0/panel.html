@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <style>
+
+      span {
+        color: red
+      }
+
+      .row {
+        height: 24px;
+        line-height: 24px;
+        overflow: hidden;  
+        white-space: nowrap;  
+        text-overflow: ellipsis;  
+      }
+      .row:nth-child(even) {
+        background-color: #F7F9FD;
+      }
+      .row button {
+        height: 20px;
+        width: 70px;
+      }
+
+      .hidden-row {
+        display: none;
+      }
+
+      #selector {
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        left: -10px;
+      }
+
+      #topbar {
+        position: fixed;
+        top: 0px;
+        height: 26px;
+        width: 100%;
+        border-bottom: 1px solid #D3E3FD;
+        background-color: white;
+        margin-left: 0px;
+      }
+
+      #topbar .btn {
+        display: inline-block;  
+        padding-top: 1px; 
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-top: 3px;
+        height : 18px;
+        
+        color: #000;  
+        text-align: center;  
+        border-radius: 6px;  
+        border: 1px solid #3498db;  
+        cursor: pointer;  
+      }
+
+      #place {
+        display: inline-block;  
+        width: 50px;
+        height: 1px;
+      }
+
+      #content {
+        margin-top: 26px;
+      }
+    </style>
+  </head>
+  <body><textarea id="selector"></textarea>
+    <div id="topbar">
+      <span id="place"></span>
+      <span id="btnClear" class="btn" title="Clear network log">Clear</span>
+    </div>
+    <div id="content"></div>
+    <script src="panel.js"></script>
+  </body>
+</html>
