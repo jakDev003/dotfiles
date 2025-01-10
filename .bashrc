@@ -1,32 +1,35 @@
-# .bashrc
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+HISTCONTROL=ignoreboth
+
+shopt -s histappend
+
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+shopt -s checkwinsize
+
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# User specific environment
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
-then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-fi
-export PATH
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
 
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
-# export SYSTEMD_PAGER=
-
-# User specific aliases and functions
-if [ -d ~/.bashrc.d ]; then
-	for rc in ~/.bashrc.d/*; do
-		if [ -f "$rc" ]; then
-			. "$rc"
-		fi
-	done
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
 fi
 
-<<<<<<< Updated upstream
-unset rc
-=======
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
@@ -68,6 +71,55 @@ fi
 
 ### ________ My Custom Configs ________ ###
 
+# Get number of installed packages
+function get_packages_info() {
+    local result="null"
+    # Check for the presence of package managers and count installed packages
+    if [ -x "$(command -v apk)" ]; then
+        result=$(apk info | wc -l)
+    elif [ -x "$(command -v apt-get)" ]; then
+        result=$(dpkg --get-selections | wc -l)
+    elif [ -x "$(command -v dnf)" ]; then
+        result=$(dnf list installed | grep -c '^[a-zA-Z0-9]')
+    elif [ -x "$(command -v zypper)" ]; then
+        result=$(zypper --no-refresh se --installed-only | grep -c '^i')
+    else
+        result="No compatible package manager found."
+    fi
+
+    # Return the result
+    echo "$result"
+}
+
+# Detect GPU model
+detect_gpu_model() {
+    # Check for lspci (commonly available on most distros)
+    if command -v lspci &> /dev/null; then
+        lspci | grep -i -e 'vga.*nvidia' -e 'vga.*amd' | head -n 1 | grep -oP '(?<=: ).*'
+        return
+    fi
+
+    # Check for glxinfo (might require mesa-utils on some systems)
+    if command -v glxinfo &> /dev/null; then
+        glxinfo | grep -i 'OpenGL renderer' | awk -F ': ' '{print $2}' | sed 's/.*\(NVIDIA.*\|AMD.*\|Intel.*\).*/\1/'
+        return
+    fi
+
+    # For systems with NVIDIA GPUs and nvidia-smi installed
+    if command -v nvidia-smi &> /dev/null; then
+        nvidia-smi --query-gpu=name --format=csv,noheader | sed 's/ .*//'
+        return
+    fi
+
+    # For systems with AMD GPUs and rocm-smi installed
+    if command -v rocm-smi &> /dev/null; then
+        rocm-smi --showproductname | grep 'Product' | awk -F ': ' '{print $2}' | sed 's/ .*//'
+        return
+    fi
+
+    echo "Unable to fetch GPU info."
+}
+
 # Custom Info
 show_my_info () {
     output=$(curl https://ifconfig.me/)
@@ -80,34 +132,19 @@ show_my_info () {
     printf "   %s\n" "DATE: $(date)"
     printf "   %s\n" "UPTIME: $(uptime -p)"
     printf "   %s\n" "HOSTNAME: $(hostname -f)"
-    printf "   %s\n" "MODEL: $(command lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
+    printf "   %s\n" "CPU MODEL: $(command lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
+    printf "   %s\n" "GPU MODEL: $(detect_gpu_model)"
     printf "   %s\n" "DISTRO: $(cat /etc/*-release | grep "PRETTY_NAME" | sed 's/.*=//')"
-    #printf "   %s\n" "CPU: $(awk -F: '/model name/{print $2}' | head -1)"
     printf "   %s\n" "KERNEL: $(uname -rms)"
-    printf "   %s\n" "PACKAGES: $(dpkg --get-selections | wc -l)"
+    printf "   %s\n" "PACKAGES: $(get_packages_info)"
     #printf "   %s\n" "RESOLUTION: $(xrandr | awk '/\*/{printf $1" "}')"
     #printf "   %s\n" "MEMORY: $(free -m -h | awk '/Mem/{print $3"/"$2}')"
     printf "\n"
 }
 
 alias vi="vim"
+alias nvim="/usr/local/bin/nvim/bin/nvim"
 
-# packagesNeeded=(curl wget unzip zip)
-# if [ -x "$(command -v apk)" ];
-# then
-#     sudo apk add --no-cache "${packagesNeeded[@]}"
-# elif [ -x "$(command -v apt-get)" ];
-# then
-#     sudo apt-get install "${packagesNeeded[@]}"
-# elif [ -x "$(command -v dnf)" ];
-# then
-#     sudo dnf install "${packagesNeeded[@]}"
-# elif [ -x "$(command -v zypper)" ];
-# then
-#     sudo zypper install "${packagesNeeded[@]}"
-# else
-#     echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: "${packagesNeeded[@]}"">&2;
-# fi
 
 # Install Starship if not found
 # if [[ $(whereis starship) == *starship* ]]; then
@@ -150,4 +187,5 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 
 
->>>>>>> Stashed changes
+
+alias luamake="/home/josh/lua-language-server/3rd/luamake/luamake"
