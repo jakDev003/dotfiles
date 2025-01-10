@@ -33,12 +33,10 @@ git pull
 # Change file permissions
 sudo chown $USER . -R
 
-HOME_DIR=$HOME
-
 # copy .config
-sudo rsync -ah --progress .config/* $HOME_DIR/.config
+sudo rsync -ah --progress .config/* $HOME/.config
 
 # copy other dot files 
-cp .vimrc $HOME_DIR/
-cp .wezterm.lua $HOME_DIR/
-sudo cp .bashrc $HOME_DIR/
+cp .vimrc $HOME/
+cp .wezterm.lua $HOME/
+sudo cp .bashrc $HOME/
