@@ -1,25 +1,27 @@
 #!/bin/bash
 
-# Define the array of files to exclude from git operations
-exclusions=(
-  ".gitignore"
-  "README.md"
-  "sendToGit.sh"
-  "pullFromGit.sh"
-)
-
-# Build the git exclude parameters
-exclude_params=()
-for file in "${exclusions[@]}"; do
-  exclude_params+=(":!$file")
-done
+# Store the current directory
+current_dir=$(pwd)
 
 # Pull the latest changes from the git repository
 echo "Pulling latest changes from git repository..."
-git pull
+if ! git pull; then
+    echo "Failed to pull the latest changes. Exiting..."
+    exit 1
+fi
 
 # Copy all files/folders from 'config' directory to '$HOME/.config' directory
 echo "Copying 'config' directory to '$HOME/.config'..."
-cp -r config/* "$HOME/.config/"
+if ! cp -r "${current_dir}/config/"* "$HOME/.config/"; then
+    echo "Failed to copy 'config' directory. Exiting..."
+    exit 1
+fi
+
+# Copy .bashrc
+if ! cp "${current_dir}/.bashrc" "$HOME/.bashrc"; then
+    echo "Failed to copy .bashrc. Exiting..."
+    exit 1
+fi
+echo "Copied .bashrc to $HOME/.bashrc"
 
 echo "Operation complete!"

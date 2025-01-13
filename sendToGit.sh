@@ -3,15 +3,19 @@
 # Get the current directory
 current_dir="$(pwd)"
 
-# Remove the current data
-sudo rm -rf .bashrc
-sudo rm -rf .config
+# Ensure .bashrc exists before removing and backing up
+if [ -f "$HOME/.bashrc" ]; then
+  # Remove the current data
+  rm -f "$current_dir/.bashrc"
 
-# Backup .bashrc
-cp "$HOME/.bashrc" "$current_dir/.bashrc"
-echo "Backed up .bashrc to $current_dir/.bashrc"
+  # Backup .bashrc
+  cp "$HOME/.bashrc" "$current_dir/.bashrc"
+  echo "Backed up .bashrc to $current_dir/.bashrc"
+else
+  echo ".bashrc does not exist in the home directory."
+fi
 
-# Backup .config directory with exclusions
+# Setup backup directory
 config_backup="$current_dir/config"
 mkdir -p "$config_backup"
 
@@ -28,7 +32,7 @@ for dir in "${exclusions[@]}"; do
 done
 
 # Use rsync to copy the .config directory with exclusions
-rsync -av "${exclude_params[@]}" "$HOME/.config/" "$config_backup/"
+rsync -av --delete "${exclude_params[@]}" "$HOME/.config/" "$config_backup/"
 echo "Backed up .config directory to $config_backup, excluding ${exclusions[*]}"
 
 # Add all dot files excluding specified files
@@ -39,8 +43,14 @@ git add .
 echo "Committing changes..."
 timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
 commit_message="Update dot files - $timestamp"
-git commit -m "$commit_message"
-echo "Pushing changes to git repository..."
-git push
 
-echo "Backup complete!"
+if git commit -m "$commit_message"; then
+  echo "Commit successful. Pushing changes to git repository..."
+  if git push; then
+    echo "Backup complete and changes pushed!"
+  else
+    echo "Failed to push changes to the repository."
+  fi
+else
+  echo "Nothing to commit or commit failed."
+fi
