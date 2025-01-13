@@ -15,18 +15,7 @@ return {
         sections = {
 	  { section = "header" },
           { section = "keys", gap = 1, padding = 1 },
-          {
-            section = 'terminal',
-            icon = ' ',
-            title = 'Git Status',
-            enabled = vim.fn.isdirectory('.git') == 1,
-            cmd = 'hub diff --stat -B -M -C',
-            height = 8,
-            padding = 2,
-            indent = 0,
-	    pane = 2
-          },
-          { section = "terminal", cmd = "curl -s 'wttr.in/?0'"},
+          { section = "terminal", cmd = "curl --insecure -s 'wttr.in/?0'"},
           function()
             local in_git = Snacks.git.get_root() ~= nil
             local cmds = {

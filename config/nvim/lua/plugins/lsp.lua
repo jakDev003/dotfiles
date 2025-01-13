@@ -28,7 +28,7 @@ return {
                 "jsonls",
                 "lua_ls",
                 "pyright",
-                "tsserver"
+                "ts_ls"
             }
         }
     },
@@ -37,17 +37,11 @@ return {
         lazy = false,
         opts = {},
         config = function()
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
             local lspconfig = require("lspconfig")
-            lspconfig.cssls.setup({capabilities = capabilities})
-            lspconfig.eslint.setup({capabilities = capabilities})
-            lspconfig.html.setup(
-                {
-                    capabilities = capabilities
-                }
-            )
-            lspconfig.jsonls.setup({capabilities = capabilities})
+            lspconfig.cssls.setup()
+            lspconfig.eslint.setup()
+            lspconfig.html.setup()
+            lspconfig.jsonls.setup()
             lspconfig.lua_ls.setup(
                 {
                     settings = {
@@ -74,15 +68,10 @@ return {
                             }
                         }
                     },
-                    capabilities = capabilities
                 }
             )
-            lspconfig.pyright.setup({capabilities = capabilities})
-            lspconfig.tsserver.setup(
-                {
-                    capabilities = capabilities
-                }
-            )
+            lspconfig.pyright.setup()
+            lspconfig.ts_ls.setup()
         end
     }
 }
