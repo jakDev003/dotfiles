@@ -17,11 +17,23 @@ if ! cp -r "${current_dir}/config/"* "$HOME/.config/"; then
     exit 1
 fi
 
+echo "Copying 'config' directory to '/root/.config'..."
+if ! cp -r "${current_dir}/config/"* "/root/.config/"; then
+    echo "Failed to copy 'config' directory. Exiting..."
+    exit 1
+fi
+
+
 # Copy .bashrc
+echo "Copying '.bashrc' to '$HOME/.bashrc'..."
 if ! cp "${current_dir}/.bashrc" "$HOME/.bashrc"; then
     echo "Failed to copy .bashrc. Exiting..."
     exit 1
 fi
-echo "Copied .bashrc to $HOME/.bashrc"
+echo "Copying '.bashrc' to '/root/.bashrc'..."
+if ! cp "${current_dir}/.bashrc" "/root/.bashrc"; then
+    echo "Failed to copy .bashrc. Exiting..."
+    exit 1
+fi
 
 echo "Operation complete!"
