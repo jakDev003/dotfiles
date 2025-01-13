@@ -62,7 +62,7 @@ if [[ $gs ]]; then
 fi
 
 # Change file permissions
-sudo chown $USER . -R
+sudo chown $USER:$USER $HOME/Git-Repos/dotfiles -R
 
 # push to Github
 git add --all
