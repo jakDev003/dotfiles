@@ -43,11 +43,11 @@ cmp.setup({
 	mapping = {
 		["<C-n>"] = cmp.mapping.select_next_item({
 			behavior = cmp.SelectBehavior.Insert,
-			Description = "Select next item",
+			desc = "Select next item",
 		}),
 		["<C-p>"] = cmp.mapping.select_prev_item({
 			behavior = cmp.SelectBehavior.Insert,
-			Description = "Select previous item",
+			desc = "Select previous item",
 		}),
 	},
 	-- Enable luasnip to handle snippet expansion for nvim-cmp

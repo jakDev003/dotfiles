@@ -139,44 +139,24 @@ return {
 					local builtin = require("telescope.builtin")
 
 					vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
-					vim.keymap.set(
-						"n",
-						"gd",
-						builtin.lsp_definitions,
-						{ buffer = bufnr, description = "Go to definition" }
-					)
-					vim.keymap.set(
-						"n",
-						"gr",
-						builtin.lsp_references,
-						{ buffer = bufnr, description = "Go to references" }
-					)
-					vim.keymap.set(
-						"n",
-						"gD",
-						vim.lsp.buf.declaration,
-						{ buffer = bufnr, description = "Go to declaration" }
-					)
+					vim.keymap.set("n", "gd", builtin.lsp_definitions, { buffer = bufnr, desc = "Go to definition" })
+					vim.keymap.set("n", "gr", builtin.lsp_references, { buffer = bufnr, desc = "Go to references" })
+					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = bufnr, desc = "Go to declaration" })
 					vim.keymap.set(
 						"n",
 						"gT",
 						vim.lsp.buf.type_definition,
-						{ buffer = bufnr, description = "Go to type definition" }
+						{ buffer = bufnr, desc = "Go to type definition" }
 					)
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, description = "Show hover" })
+					vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Show hover" })
 
-					vim.keymap.set("n", "<LEADER>cr", vim.lsp.buf.rename, { buffer = bufnr, description = "Rename" })
-					vim.keymap.set(
-						"n",
-						"<LEADER>ca",
-						vim.lsp.buf.code_action,
-						{ buffer = bufnr, description = "Code action" }
-					)
+					vim.keymap.set("n", "<LEADER>cr", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename" })
+					vim.keymap.set("n", "<LEADER>ca", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code action" })
 					vim.keymap.set(
 						"n",
 						"<LEADER>wd",
 						builtin.lsp_document_symbols,
-						{ buffer = bufnr, description = "Document symbols" }
+						{ buffer = bufnr, desc = "Document symbols" }
 					)
 
 					local filetype = vim.bo[bufnr].filetype
