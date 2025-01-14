@@ -1,8 +1,17 @@
-local function get_random_ascii_art()
-	local headers = require("shared").art
-	math.randomseed(os.time())
-	local index = math.random(1, #headers)
-	return headers[index]
+local headers = require("shared").art
+math.randomseed(os.time())
+local index = math.random(1, #headers)
+local get_random_ascii_art = headers[index]
+local os = vim.loop.os_uname().sysname
+
+local terminal_cmd
+if os == "Linux" then
+	terminal_cmd = "curl --insecure -s 'wttr.in/?0'"
+elseif os == "Windows_NT" then
+	terminal_cmd =
+		[[%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe -Command "(Invoke-WebRequest -Uri 'wttr.in/?0' -UseBasicParsing).Content"]]
+else
+	terminal_cmd = "echo 'Unsupported OS'"
 end
 
 return {
@@ -16,10 +25,19 @@ return {
 			bigfile = { enabled = true },
 			dashboard = {
 				enabled = true,
+				preset = {
+					header = get_random_ascii_art,
+				},
 				sections = {
-					{ section = "header", content = get_random_ascii_art() },
+					{
+						text = get_random_ascii_art,
+						align = "center",
+						height = 16,
+						width = 48,
+						padding = 1,
+					},
 					{ section = "keys", gap = 1, padding = 1 },
-					{ section = "terminal", cmd = "curl --insecure -s 'wttr.in/?0'" },
+					{ section = "terminal", cmd = terminal_cmd, pane = 2 },
 					function()
 						local in_git = Snacks.git.get_root() ~= nil
 						local cmds = {

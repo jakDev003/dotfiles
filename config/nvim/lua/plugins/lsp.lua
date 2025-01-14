@@ -18,13 +18,10 @@ return {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-
 			-- Autoformatting
 			"stevearc/conform.nvim",
-
 			-- JSON LS
 			"b0o/SchemaStore.nvim",
-
 			-- JAVA
 			"nvim-java/nvim-java",
 		},
@@ -46,9 +43,7 @@ return {
 					},
 				},
 				intelephense = true,
-
 				pyright = true,
-
 				-- Enabled biome formatting, turn off all the other ones generally
 				biome = true,
 				ts_ls = {
@@ -58,13 +53,11 @@ return {
 						documentFormattingProvider = false,
 					},
 				},
-
 				jdtls = {
 					server_capabilities = {
 						documentFormattingProvider = false,
 					},
 				},
-
 				jsonls = {
 					server_capabilities = {
 						documentFormattingProvider = false,
@@ -76,13 +69,11 @@ return {
 						},
 					},
 				},
-
 				cssls = {
 					server_capabilities = {
 						documentFormattingProvider = false,
 					},
 				},
-
 				yamlls = {
 					settings = {
 						yaml = {
@@ -94,13 +85,9 @@ return {
 						},
 					},
 				},
-
 				clangd = {
 					cmd = { "clangd" },
-					-- TODO: Could include cmd, but not sure those were all relevant flags.
-					--    looks like something i would have added while i was floundering
 					init_options = { clangdFileStatus = true },
-
 					filetypes = { "c" },
 				},
 			}
@@ -152,15 +139,45 @@ return {
 					local builtin = require("telescope.builtin")
 
 					vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
-					vim.keymap.set("n", "gd", builtin.lsp_definitions, { buffer = 0 })
-					vim.keymap.set("n", "gr", builtin.lsp_references, { buffer = 0 })
-					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
-					vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { buffer = 0 })
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
+					vim.keymap.set(
+						"n",
+						"gd",
+						builtin.lsp_definitions,
+						{ buffer = bufnr, description = "Go to definition" }
+					)
+					vim.keymap.set(
+						"n",
+						"gr",
+						builtin.lsp_references,
+						{ buffer = bufnr, description = "Go to references" }
+					)
+					vim.keymap.set(
+						"n",
+						"gD",
+						vim.lsp.buf.declaration,
+						{ buffer = bufnr, description = "Go to declaration" }
+					)
+					vim.keymap.set(
+						"n",
+						"gT",
+						vim.lsp.buf.type_definition,
+						{ buffer = bufnr, description = "Go to type definition" }
+					)
+					vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, description = "Show hover" })
 
-					vim.keymap.set("n", "<LEADER>cr", vim.lsp.buf.rename, { buffer = 0 })
-					vim.keymap.set("n", "<LEADER>ca", vim.lsp.buf.code_action, { buffer = 0 })
-					vim.keymap.set("n", "<LEADER>wd", builtin.lsp_document_symbols, { buffer = 0 })
+					vim.keymap.set("n", "<LEADER>cr", vim.lsp.buf.rename, { buffer = bufnr, description = "Rename" })
+					vim.keymap.set(
+						"n",
+						"<LEADER>ca",
+						vim.lsp.buf.code_action,
+						{ buffer = bufnr, description = "Code action" }
+					)
+					vim.keymap.set(
+						"n",
+						"<LEADER>wd",
+						builtin.lsp_document_symbols,
+						{ buffer = bufnr, description = "Document symbols" }
+					)
 
 					local filetype = vim.bo[bufnr].filetype
 					if disable_semantic_tokens[filetype] then
@@ -171,7 +188,6 @@ return {
 					if settings.server_capabilities then
 						for k, v in pairs(settings.server_capabilities) do
 							if v == vim.NIL then
-								---@diagnostic disable-next-line: cast-local-type
 								v = nil
 							end
 
