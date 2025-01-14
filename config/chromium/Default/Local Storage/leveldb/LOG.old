@@ -1,0 +1,5 @@
+2025/01/13-06:52:04.660 4 Reusing MANIFEST /home/josh/.config/chromium/Default/Local Storage/leveldb/MANIFEST-000001
+2025/01/13-06:52:04.663 4 Recovering log #3
+2025/01/13-06:52:04.663 4 Level-0 table #3: started
+2025/01/13-06:52:04.664 4 Level-0 table #3: 27850 bytes OK
+2025/01/13-06:52:04.665 4 Delete type=0 #3

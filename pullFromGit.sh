@@ -18,7 +18,7 @@ if ! cp -r "${current_dir}/config/"* "$HOME/.config/"; then
 fi
 
 echo "Copying 'config' directory to '/root/.config'..."
-if ! cp -r "${current_dir}/config/"* "/root/.config/"; then
+if ! sudo cp -r "${current_dir}/config/"* "/root/.config/"; then
     echo "Failed to copy 'config' directory. Exiting..."
     exit 1
 fi
@@ -31,7 +31,7 @@ if ! cp "${current_dir}/.bashrc" "$HOME/.bashrc"; then
     exit 1
 fi
 echo "Copying '.bashrc' to '/root/.bashrc'..."
-if ! cp "${current_dir}/.bashrc" "/root/.bashrc"; then
+if ! sudo cp "${current_dir}/.bashrc" "/root/.bashrc"; then
     echo "Failed to copy .bashrc. Exiting..."
     exit 1
 fi

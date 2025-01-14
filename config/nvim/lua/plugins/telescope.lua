@@ -1,8 +1,5 @@
 return {
     {
-        "nvim-telescope/telescope-file-browser.nvim",
-    },
-    {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.5",
         dependencies = { "nvim-lua/plenary.nvim" },
@@ -18,23 +15,7 @@ return {
                         },
                     },
                 },
-                extensions = {
-                    file_browser = {
-                        -- disables netrw and use telescope-file-browser in its place
-                        hijack_netrw = true,
-                        result_height = 20,
-                        prompt_title = 'Telescope File Browser',
-                        prompt_prefix = 'Files> ',
-                        mappings = {
-                            ["i"] = {
-                                -- your custom insert mode mappings
-                            },
-                            ["n"] = {
-                                -- your custom normal mode mappings
-                            },
-                        },
-                    },
-                },
+                extensions = {},
             })
             local builtin = require("telescope.builtin")
             local themes = require("telescope.themes")
@@ -61,11 +42,6 @@ return {
             vim.keymap.set('n', '<leader>ps', function()
                 builtin.grep_string({ search = vim.fn.input("Grep > ") })
             end, { desc = '[P]ower [S]earch' })
-
-            vim.keymap.set("n", "<space>fb", "<cmd>Telescope file_browser path=%:p:h select_buffer=true<CR>",
-                { desc = '[F]ile [B]rowser', noremap = true })
-
-            require("telescope").load_extension "file_browser"
         end,
     },
 }
