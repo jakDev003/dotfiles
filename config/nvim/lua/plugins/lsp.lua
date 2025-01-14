@@ -19,49 +19,24 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 
-			{ "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
-
 			-- Autoformatting
 			"stevearc/conform.nvim",
 
 			-- JSON LS
 			"b0o/SchemaStore.nvim",
+
+			-- JAVA
+			"nvim-java/nvim-java",
 		},
 		config = function()
-			-- Don't do LSP stuff if we're in Obsidian Edit mode
-			if vim.g.obsidian then
-				return
-			end
-
-			local extend = function(name, key, values)
-				local mod = require(string.format("lspconfig.configs.%s", name))
-				local default = mod.default_config
-				local keys = vim.split(key, ".", { plain = true })
-				while #keys > 0 do
-					local item = table.remove(keys, 1)
-					default = default[item]
-				end
-
-				if vim.islist(default) then
-					for _, value in ipairs(default) do
-						table.insert(values, value)
-					end
-				else
-					for item, value in pairs(default) do
-						if not vim.tbl_contains(values, item) then
-							values[item] = value
-						end
-					end
-				end
-				return values
-			end
-
 			local capabilities = nil
 			if pcall(require, "cmp_nvim_lsp") then
 				capabilities = require("cmp_nvim_lsp").default_capabilities()
 			end
 
 			local lspconfig = require("lspconfig")
+
+			require("java").setup()
 
 			local servers = {
 				bashls = true,
@@ -79,6 +54,12 @@ return {
 				ts_ls = {
 					root_dir = require("lspconfig").util.root_pattern("package.json"),
 					single_file = false,
+					server_capabilities = {
+						documentFormattingProvider = false,
+					},
+				},
+
+				jdtls = {
 					server_capabilities = {
 						documentFormattingProvider = false,
 					},
@@ -115,7 +96,7 @@ return {
 				},
 
 				clangd = {
-					-- cmd = { "clangd", unpack(require("custom.clangd").flags) },
+					cmd = { "clangd" },
 					-- TODO: Could include cmd, but not sure those were all relevant flags.
 					--    looks like something i would have added while i was floundering
 					init_options = { clangdFileStatus = true },
@@ -201,18 +182,6 @@ return {
 			})
 
 			require("custom.autoformat").setup()
-
-			require("lsp_lines").setup()
-			vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
-
-			vim.keymap.set("", "<leader>l", function()
-				local config = vim.diagnostic.config() or {}
-				if config.virtual_text then
-					vim.diagnostic.config({ virtual_text = false, virtual_lines = true })
-				else
-					vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
-				end
-			end, { desc = "Toggle lsp_lines" })
 		end,
 	},
 }
