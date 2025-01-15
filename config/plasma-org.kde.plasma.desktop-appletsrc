@@ -61,8 +61,8 @@ plugin=org.kde.plasma.kickoff
 
 [Containments][2][Applets][3][Configuration]
 PreloadWeight=100
-popupHeight=545
-popupWidth=711
+popupHeight=548
+popupWidth=715
 
 [Containments][2][Applets][3][Configuration][General]
 favoritesPortedToKAstats=true
@@ -108,8 +108,8 @@ immutability=1
 lastScreen=0
 location=4
 plugin=org.kde.plasma.private.systemtray
-popupHeight=435
-popupWidth=436
+popupHeight=438
+popupWidth=440
 wallpaperplugin=org.kde.image
 
 [Containments][9][Applets][10]
@@ -129,7 +129,7 @@ immutability=1
 plugin=org.kde.plasma.clipboard
 
 [Containments][9][Applets][13][Configuration]
-PreloadWeight=65
+PreloadWeight=95
 
 [Containments][9][Applets][14]
 immutability=1

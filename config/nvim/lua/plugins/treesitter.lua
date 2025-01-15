@@ -6,8 +6,8 @@ return {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 			"nvim-treesitter/nvim-treesitter-refactor",
 			"nvim-treesitter/nvim-treesitter-context",
-			"nvim-treesitter/nvim-treesitter-highlight",
-			"https://gitlab.com/HiPhish/nvim-ts-rainbow2",
+			--"nvim-treesitter/nvim-treesitter-highlight",
+			--"https://gitlab.com/HiPhish/nvim-ts-rainbow2",
 		},
 		config = function()
 			require("nvim-treesitter.configs").setup({
@@ -24,11 +24,11 @@ return {
 					end,
 					additional_vim_regex_highlighting = false,
 				},
-				rainbow = {
-					enable = true,
-					query = "rainbow-parens",
-					strategy = require("ts-rainbow").strategy.global,
-				},
+				-- rainbow = {
+				-- 	enable = true,
+				-- 	query = "rainbow-parens",
+				-- 	strategy = require("ts-rainbow").strategy.global,
+				-- },
 			})
 		end,
 	},

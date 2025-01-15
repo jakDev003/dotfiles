@@ -5,13 +5,16 @@ local get_random_ascii_art = headers[index]
 local os = vim.loop.os_uname().sysname
 
 local terminal_cmd
+local url = "wttr.in/02364"
+
 if os == "Linux" then
-	terminal_cmd = "curl --insecure -s 'wttr.in/?0'"
+	terminal_cmd = "curl --insecure -s '" .. url .. "'"
 elseif os == "Windows_NT" then
-	terminal_cmd =
-		[[%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe -Command "(Invoke-WebRequest -Uri 'wttr.in/?0' -UseBasicParsing).Content"]]
+	terminal_cmd = [[%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe -Command "(Invoke-WebRequest -Uri ']]
+		.. url
+		.. [[' -UseBasicParsing).Content"]]
 else
-	terminal_cmd = "echo 'Unsupported OS'"
+	terminal_cmd = "echo 'Unsupported OS for Weather Report'"
 end
 
 return {
@@ -37,7 +40,7 @@ return {
 						padding = 1,
 					},
 					{ section = "keys", gap = 1, padding = 1 },
-					{ section = "terminal", cmd = terminal_cmd, pane = 2 },
+					{ section = "terminal", cmd = terminal_cmd, pane = 2, height = 6 },
 					function()
 						local in_git = Snacks.git.get_root() ~= nil
 						local cmds = {
