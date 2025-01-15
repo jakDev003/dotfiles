@@ -3,6 +3,7 @@ return {
 		"nvim-lualine/lualine.nvim",
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
+			"tpope/vim-fugitive",
 		},
 		config = function()
 			-- Define the custom function for lualine section
@@ -41,8 +42,8 @@ return {
 			local mode = {
 				"mode",
 				fmt = function(str)
-					-- return ' ' .. str:sub(1, 1) -- displays only the first character of the mode
-					return " " .. str
+					return " " .. str:sub(1, 1) -- displays only the first character of the mode
+					--return " " .. str
 				end,
 			}
 
