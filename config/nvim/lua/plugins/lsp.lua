@@ -90,6 +90,23 @@ return {
 					init_options = { clangdFileStatus = true },
 					filetypes = { "c" },
 				},
+
+				groovyls = {
+					cmd = {
+						"java",
+						"-jar",
+						"C:\\Users\\jkagiwada\\myBin\\groovy-language-server\\groovy-language-server\\build\\libs\\groovy-language-server-all.jar",
+					},
+					filetypes = { "groovy" },
+					--root_dir = nvim_lsp.util.root_pattern(".git", "build.gradle", "settings.gradle"),
+					settings = {},
+				},
+
+				cucumber_language_server = {
+					server_capabilities = {
+						documentFormattingProvider = false,
+					},
+				},
 			}
 
 			local servers_to_install = vim.tbl_filter(function(key)

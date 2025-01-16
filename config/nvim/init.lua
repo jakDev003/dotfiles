@@ -6,6 +6,7 @@ vim.o.ignorecase = true -- Ignore case when searching...
 vim.o.smartcase = true -- Do smart case matching
 vim.wo.number = true -- Make line numbers default
 vim.wo.relativenumber = false -- Make relative line numbers default
+vim.wo.cursorline = true -- Make current line number highlighted
 vim.o.splitbelow = true -- force all horizontal splits to go below current window
 vim.o.splitright = true -- force all vertical splits to go to the right of current window
 vim.wo.signcolumn = "yes" -- Keep signcolumn on by default
@@ -28,6 +29,18 @@ vim.o.conceallevel = 0 -- so that `` is visible in markdown files
 --vim.o.fileencoding = "utf-8" -- the encoding written to a file
 vim.o.encoding = "utf-8" -- the encoding displayed
 vim.o.ruler = true -- show the cursor position all the time
+
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Custom Code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local signs = {
+	Error = "⛔",
+	Warn = "❗",
+	Hint = "❓",
+	Info = "💡",
+}
+for type, icon in pairs(signs) do
+	local hl = "DiagnosticSign" .. type
+	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
 
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Keymaps ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- Source the current file
@@ -52,10 +65,6 @@ vim.keymap.set("n", "<Esc>", ":noh<CR>", { noremap = true, silent = true, desc =
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true, desc = "scroll down" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true, desc = "scroll up" })
 
--- Find and center
-vim.keymap.set("n", "n", "nzzzv", { noremap = true, silent = true, desc = "find next" })
-vim.keymap.set("n", "N", "Nzzzv", { noremap = true, silent = true, desc = "find previous" })
-
 -- Resize with arrows
 vim.keymap.set("n", "<Up>", ":resize -2<CR>", { noremap = true, silent = true, desc = "resize up" })
 vim.keymap.set("n", "<Down>", ":resize +2<CR>", { noremap = true, silent = true, desc = "resize down" })
@@ -63,10 +72,10 @@ vim.keymap.set("n", "<Left>", ":vertical resize -2<CR>", { noremap = true, silen
 vim.keymap.set("n", "<Right>", ":vertical resize +2<CR>", { noremap = true, silent = true, desc = "resize right" })
 
 -- Buffers
-vim.keymap.set("n", "<Tab>", ":bnext<CR>", { noremap = true, silent = true, desc = "next buffer" })
-vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { noremap = true, silent = true, desc = "previous buffer" })
-vim.keymap.set("n", "<leader>x", ":Bdelete!<CR>", { noremap = true, silent = true, desc = "delete buffer" })
-vim.keymap.set("n", "<leader>b", "<cmd> enew <CR>", { noremap = true, silent = true, desc = "new buffer" })
+vim.keymap.set("n", "<leader>bh", ":bnext<CR>", { noremap = true, silent = true, desc = "next buffer" })
+vim.keymap.set("n", "<leader>bl", ":bprevious<CR>", { noremap = true, silent = true, desc = "previous buffer" })
+vim.keymap.set("n", "<leader>bd", ":Bdelete!<CR>", { noremap = true, silent = true, desc = "delete buffer" })
+vim.keymap.set("n", "<leader>bn", "<cmd> enew <CR>", { noremap = true, silent = true, desc = "new buffer" })
 
 -- Increment/decrement numbers
 vim.keymap.set("n", "<leader>+", "<C-a>", { noremap = true, silent = true, desc = "increment" })
