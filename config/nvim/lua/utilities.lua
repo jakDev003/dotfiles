@@ -1,8 +1,9 @@
 local M = {}
 ---@diagnostic disable-next-line: deprecated
 local uv = vim.version().minor >= 10 and vim.uv or vim.loop
-M.iswin = uv.os_uname().sysname:match("Windows")
-M.ismac = uv.os_uname().sysname == "Darwin"
+M.os = vim.loop.os_uname().sysname
+M.iswin = M.os:match("Windows")
+M.ismac = M.os == "Darwin"
 M.is_ten = vim.version().minor >= 10
 M.path_sep = M.iswin and "\\" or "/"
 
@@ -12,9 +13,7 @@ end
 
 M.get_lsp_client = function(ignoreClient)
 	local msg = "No Active Lsp"
-	---@diagnostic disable-next-line: deprecated
 	local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
-	---@diagnostic disable-next-line: deprecated
 	local clients = vim.lsp.get_active_clients()
 	ignoreClient = ignoreClient or ""
 	if next(clients) == nil then
@@ -22,7 +21,7 @@ M.get_lsp_client = function(ignoreClient)
 	end
 
 	for _, client in ipairs(clients) do
-		if ignoreClient and client.name ~= ignoreClient then
+		if ignoreClient ~= client.name then
 			local filetypes = client.config.filetypes
 			if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
 				return client.name

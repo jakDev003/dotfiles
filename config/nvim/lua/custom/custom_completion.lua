@@ -35,16 +35,15 @@ cmp.setup({
 		},
 		{ name = "copilot" },
 		{ name = "nvim_lsp" },
+		{ name = "luasnip" },
 		{ name = "path" },
 		{ name = "buffer" },
 	},
 	mapping = {
-		--["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-		--["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-
-		["l"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-		["h"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-		["<C-y>"] = cmp.mapping(
+		["<C-l>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+		["<C-h>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+		["<C-Space>"] = cmp.mapping.complete(),
+		["<CR>"] = cmp.mapping(
 			cmp.mapping.confirm({
 				behavior = cmp.ConfirmBehavior.Insert,
 				select = true,

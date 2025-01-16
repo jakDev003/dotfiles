@@ -3,7 +3,6 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			{
-				-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
 				-- used for completion, annotations and signatures of Neovim apis
 				"folke/lazydev.nvim",
 				ft = "lua",
@@ -191,6 +190,14 @@ return {
 							client.server_capabilities[k] = v
 						end
 					end
+
+					vim.diagnostic.config({
+						virtual_text = false,
+					})
+
+					-- Show line diagnostics automatically in hover window
+					vim.o.updatetime = 250
+					vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
 				end,
 			})
 
