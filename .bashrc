@@ -122,6 +122,7 @@ detect_gpu_model() {
 
 # Custom Info
 show_my_info () {
+<<<<<<< HEAD
     if command -v fastfetch &> /dev/null; then
         fastfetch
     else
@@ -144,11 +145,35 @@ show_my_info () {
         #printf "   %s\n" "MEMORY: $(free -m -h | awk '/Mem/{print $3"/"$2}')"
         printf "\n"
     fi
+=======
+    output=$(curl https://ifconfig.me/)
+    
+    clear
+    
+    printf "\n"
+    printf "   %s\n" "IP ADDR: $output"
+    printf "   %s\n" "USER: $(whoami)"
+    printf "   %s\n" "DATE: $(date)"
+    printf "   %s\n" "UPTIME: $(uptime -p)"
+    printf "   %s\n" "HOSTNAME: $(hostname -f)"
+    printf "   %s\n" "CPU MODEL: $(command lscpu | grep 'Model name' | cut -f 2 -d ":" | awk '{$1=$1}1')"
+    printf "   %s\n" "GPU MODEL: $(detect_gpu_model)"
+    printf "   %s\n" "DISTRO: $(cat /etc/*-release | grep "PRETTY_NAME" | sed 's/.*=//')"
+    printf "   %s\n" "KERNEL: $(uname -rms)"
+    printf "   %s\n" "PACKAGES: $(get_packages_info)"
+    #printf "   %s\n" "RESOLUTION: $(xrandr | awk '/\*/{printf $1" "}')"
+    #printf "   %s\n" "MEMORY: $(free -m -h | awk '/Mem/{print $3"/"$2}')"
+    printf "\n"
+>>>>>>> main
 }
 
 alias vi="vim"
 alias nvim="/usr/local/bin/nvim/bin/nvim"
+<<<<<<< HEAD
 alias luamake="/home/josh/lua-language-server/3rd/luamake/luamake"
+=======
+
+>>>>>>> main
 
 # Install Starship if not found
 # if [[ $(whereis starship) == *starship* ]]; then
@@ -188,3 +213,8 @@ show_my_info
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+
+
+alias luamake="/home/josh/lua-language-server/3rd/luamake/luamake"
