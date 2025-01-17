@@ -1,12 +1,9 @@
-local headers = require("shared").art
-math.randomseed(os.time())
-local index = math.random(1, #headers)
-local get_random_ascii_art = headers[index]
-local os = vim.loop.os_uname().sysname
-
+local shared = require("shared")
+local utils = require("utilities")
+local randomArt = shared.getRandomArt()
+local os = utils.os
 local terminal_cmd
 local url = "wttr.in/02364"
-
 if os == "Linux" then
 	terminal_cmd = "curl --insecure -s '" .. url .. "'"
 elseif os == "Windows_NT" then
@@ -16,24 +13,23 @@ elseif os == "Windows_NT" then
 else
 	terminal_cmd = "echo 'Unsupported OS for Weather Report'"
 end
-
 return {
 	{
 		"folke/snacks.nvim",
 		priority = 1000,
 		lazy = false,
-		---@type snacks.Config
 		opts = {
 			animate = { enabled = true },
 			bigfile = { enabled = true },
+			git = { enabled = true },
 			dashboard = {
 				enabled = true,
 				preset = {
-					header = get_random_ascii_art,
+					header = randomArt,
 				},
 				sections = {
 					{
-						text = get_random_ascii_art,
+						text = randomArt,
 						align = "center",
 						height = 16,
 						width = 48,
@@ -42,6 +38,7 @@ return {
 					{ section = "keys", gap = 1, padding = 1 },
 					{ section = "terminal", cmd = terminal_cmd, pane = 2, height = 6 },
 					function()
+						local Snacks = require("snacks")
 						local in_git = Snacks.git.get_root() ~= nil
 						local cmds = {
 							{
@@ -65,11 +62,52 @@ return {
 					{ section = "startup" },
 				},
 			},
-			indent = { enabled = true },
+			indent = {
+				enabled = true,
+				chunk = {
+					enabled = true,
+					char = {
+						corner_top = "╭",
+						corner_bottom = "╰",
+						arrow = "▶",
+						horizontal = "▶",
+						-- arrow = '─',
+						-- horizontal = '─'
+					},
+				},
+				indent = { enabled = false },
+				scope = { enabled = true },
+			},
 			input = { enabled = true },
-			notifier = { enabled = true },
+			notifier = {
+				enabled = true,
+				style = function(buf, notif, ctx)
+					vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(notif.msg, "\n"))
+				end,
+				icons = {
+					error = "",
+					info = "",
+					warn = "",
+				},
+				width = { min = 40, max = 70 },
+			},
 			quickfile = { enabled = true },
-			scroll = { enabled = true },
+			styles = {
+				["notification"] = {
+					wo = { wrap = true },
+				},
+				["notification_history"] = {
+					width = 0.8,
+					title = " Notifications ",
+					keys = { q = "close", ["<Esc>"] = "close" },
+					wo = { wrap = true },
+				},
+			},
+			scroll = {
+				animate = {
+					easing = "inQuad",
+				},
+			},
 			statuscolumn = { enabled = true },
 			toggle = { enabled = true },
 			words = { enabled = true },
