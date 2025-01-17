@@ -122,6 +122,30 @@ detect_gpu_model() {
 
 # Custom Info
 show_my_info () {
+<<<<<<< HEAD
+    if command -v fastfetch &> /dev/null; then
+        fastfetch
+    else
+        output=$(curl -s https://ifconfig.me/)
+        
+        clear
+        
+        printf "\n"
+        printf "   %s\n" "IP ADDR: $output"
+        printf "   %s\n" "USER: $(whoami)"
+        printf "   %s\n" "DATE: $(date)"
+        printf "   %s\n" "UPTIME: $(uptime -p)"
+        printf "   %s\n" "HOSTNAME: $(hostname -f)"
+        printf "   %s\n" "CPU MODEL: $(lscpu | grep 'Model name' | cut -f 2 -d ':' | awk '{$1=$1}1')"
+        printf "   %s\n" "GPU MODEL: $(detect_gpu_model)"
+        printf "   %s\n" "DISTRO: $(grep 'PRETTY_NAME' /etc/*-release | sed 's/.*=//')"
+        printf "   %s\n" "KERNEL: $(uname -rms)"
+        printf "   %s\n" "PACKAGES: $(get_packages_info)"
+        #printf "   %s\n" "RESOLUTION: $(xrandr | awk '/\*/{printf $1" "}')"
+        #printf "   %s\n" "MEMORY: $(free -m -h | awk '/Mem/{print $3"/"$2}')"
+        printf "\n"
+    fi
+=======
     output=$(curl https://ifconfig.me/)
     
     clear
@@ -140,11 +164,16 @@ show_my_info () {
     #printf "   %s\n" "RESOLUTION: $(xrandr | awk '/\*/{printf $1" "}')"
     #printf "   %s\n" "MEMORY: $(free -m -h | awk '/Mem/{print $3"/"$2}')"
     printf "\n"
+>>>>>>> main
 }
 
 alias vi="vim"
 alias nvim="/usr/local/bin/nvim/bin/nvim"
+<<<<<<< HEAD
+alias luamake="/home/josh/lua-language-server/3rd/luamake/luamake"
+=======
 
+>>>>>>> main
 
 # Install Starship if not found
 # if [[ $(whereis starship) == *starship* ]]; then

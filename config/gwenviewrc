@@ -1,0 +1,13 @@
+[General]
+LastUsedVersion=210800
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Disabled
+
+[Recent Files]
+File1[$e]=$HOME/Downloads/Screenshot_20250113_123545.png
+Name1[$e]=Screenshot_20250113_123545.png
+
+[SideBar]
+InformationSplitterSizes=0,0
