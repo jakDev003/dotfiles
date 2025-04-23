@@ -1,5 +1,5 @@
 return {
-    {
+	{
 		"williamboman/mason.nvim",
 		dependencies = {
 			"williamboman/mason-lspconfig.nvim",
@@ -161,9 +161,9 @@ return {
 			_G.augment_workspace = "~/GitRepos"
 
 			-- Add key bindings for Augment
-			vim.keymap.set("n", "<leader>aa", "<cmd>AugmentAsk<CR>", { desc = "Augment Ask" })
-			vim.keymap.set("n", "<leader>ac", "<cmd>AugmentChat<CR>", { desc = "Augment Chat" })
-			vim.keymap.set("v", "<leader>aa", ":<C-u>AugmentAskSelection<CR>", { desc = "Augment Ask Selection" })
+			vim.keymap.set("n", "<leader>aa", "<cmd>Augment chat<CR>", { desc = "Augment Ask" })
+			vim.keymap.set("n", "<leader>ac", "<cmd>Augment chat-new<CR>", { desc = "Augment Chat" })
+			vim.keymap.set("n", "<leader>at", "<cmd>Augment chat-toggle<CR>", { desc = "Augment Chat Toggle" })
 		end,
 	},
 	{
