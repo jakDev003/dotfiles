@@ -11,8 +11,10 @@ HYPRPAPER_CONFIG=${HYPRPAPER_CONFIG:-"$HOME/.config/hypr/hyprpaper.conf"}
 
 declare -a IMAGES=()
 declare -a MONITORS=()
+ACTIVE_HYPRPAPER_SIGNATURE=""
 
 mkdir -p "$CACHE_DIR"
+
 
 log() {
   printf '%s %s\n' "$(date +'%F %T')" "$*" >>"$LOG_FILE"
@@ -183,8 +185,32 @@ require_monitors() {
 ensure_backend() {
   ensure_hyprpaper_config
 
+  local signature="${HYPRLAND_INSTANCE_SIGNATURE:-}"
+  if [ -z "$signature" ]; then
+    refresh_hypr_signature || true
+    signature="${HYPRLAND_INSTANCE_SIGNATURE:-}"
+  fi
+
+  local restart_required=0
+  if [ -n "$signature" ] && [ "$ACTIVE_HYPRPAPER_SIGNATURE" != "$signature" ]; then
+    restart_required=1
+  fi
+
+  if [ "$restart_required" -eq 1 ] && pgrep -x hyprpaper >/dev/null 2>&1; then
+    log "Restarting hyprpaper for Hyprland signature $signature"
+    pkill -x hyprpaper >/dev/null 2>&1 || true
+    sleep 0.2
+  fi
+
   if ! pgrep -x hyprpaper >/dev/null 2>&1; then
-    hyprpaper -c "$HYPRPAPER_CONFIG" &
+    log "Launching hyprpaper"
+    if [ -n "$signature" ]; then
+      HYPRLAND_INSTANCE_SIGNATURE="$signature" hyprpaper -s "$signature" -c "$HYPRPAPER_CONFIG" >/dev/null 2>&1 &
+      ACTIVE_HYPRPAPER_SIGNATURE="$signature"
+    else
+      hyprpaper -c "$HYPRPAPER_CONFIG" >/dev/null 2>&1 &
+      ACTIVE_HYPRPAPER_SIGNATURE=""
+    fi
     sleep 0.5
   fi
 
