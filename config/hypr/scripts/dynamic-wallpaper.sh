@@ -44,6 +44,15 @@ refresh_hypr_signature() {
   return 0
 }
 
+hyprctl_cmd() {
+  refresh_hypr_signature || true
+  if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+    hyprctl -i "$HYPRLAND_INSTANCE_SIGNATURE" "$@"
+  else
+    hyprctl "$@"
+  fi
+}
+
 select_backend() {
   if command -v hyprpaper >/dev/null 2>&1; then
     BACKEND="hyprpaper"
@@ -59,8 +68,7 @@ select_backend() {
 wait_for_hyprctl() {
   local tries=${1:-60}
   while (( tries-- > 0 )); do
-    refresh_hypr_signature || true
-    if hyprctl monitors >/dev/null 2>&1; then
+    if hyprctl_cmd monitors >/dev/null 2>&1; then
       return 0
     fi
     sleep 0.5
@@ -120,9 +128,8 @@ require_images() {
 require_monitors() {
   local tries=${1:-60}
   while (( tries-- > 0 )); do
-    refresh_hypr_signature || true
     local output
-    output=$(hyprctl monitors 2>/dev/null || true)
+    output=$(hyprctl_cmd monitors 2>/dev/null || true)
 
     local -a names=()
     while IFS= read -r line; do
@@ -160,8 +167,7 @@ ensure_backend() {
 
       if wait_for_hyprctl 40; then
         for _ in $(seq 1 40); do
-          refresh_hypr_signature || true
-          if hyprctl hyprpaper listloaded >/dev/null 2>&1; then
+          if hyprctl_cmd hyprpaper listloaded >/dev/null 2>&1; then
             return 0
           fi
           sleep 0.25
@@ -196,9 +202,12 @@ apply_wallpaper() {
 
   case "$BACKEND" in
     hyprpaper)
-      refresh_hypr_signature || true
-      hyprctl hyprpaper preload "$image" >/dev/null 2>&1 || true
-      hyprctl hyprpaper wallpaper "$monitor,$image" >/dev/null 2>&1 || true
+      if ! pgrep -x hyprpaper >/dev/null 2>&1; then
+        log "hyprpaper not running; restarting"
+        ensure_backend
+      fi
+      hyprctl_cmd hyprpaper preload "$image" >/dev/null 2>&1 || true
+      hyprctl_cmd hyprpaper wallpaper "$monitor,$image" >/dev/null 2>&1 || true
       ;;
     swww)
       swww img "$image" --outputs "$monitor" --transition-type none --resize crop >/dev/null 2>&1 || true
@@ -211,6 +220,7 @@ apply_wallpaper() {
 cycle_wallpapers() {
   log "Starting dynamic wallpaper loop (backend=$BACKEND, interval=${INTERVAL_SECONDS}s)"
   while true; do
+    ensure_backend
     mapfile -t cycle < <(shuf -e "${IMAGES[@]}")
 
     for image in "${cycle[@]}"; do
