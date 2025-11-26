@@ -140,3 +140,4 @@ vim.diagnostic.config({
 		vim.cmd("highlight DiagnosticVirtualText guibg=NONE")
 	end,
 })
+

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROMPT="Bluetooth"
+
+if command -v fuzzel >/dev/null 2>&1; then
+    MENU_CMD=(fuzzel --dmenu --prompt="$PROMPT" --width=28 --lines=8)
+elif command -v wofi >/dev/null 2>&1; then
+    MENU_CMD=(wofi --dmenu --prompt "$PROMPT")
+elif command -v rofi >/dev/null 2>&1; then
+    MENU_CMD=(rofi -dmenu -p "$PROMPT")
+elif command -v bemenu >/dev/null 2>&1; then
+    MENU_CMD=(bemenu -p "$PROMPT")
+elif command -v dmenu >/dev/null 2>&1; then
+    MENU_CMD=(dmenu -p "$PROMPT")
+else
+    notify-send "$PROMPT" "No menu launcher (fuzzel/wofi/rofi/bemenu/dmenu) found" >/dev/null 2>&1 || true
+    exit 1
+fi
+
+if ! command -v bluetoothctl >/dev/null 2>&1; then
+    notify-send "Bluetooth" "bluetoothctl not available" >/dev/null 2>&1 || true
+    exit 1
+fi
+
+# Ensure the controller is powered on; ignore failures if no adapter is present.
+bluetoothctl power on >/dev/null 2>&1 || true
+
+mapfile -t DEVICE_LINES < <(bluetoothctl devices)
+
+if [ "${#DEVICE_LINES[@]}" -eq 0 ]; then
+    notify-send "Bluetooth" "No paired devices found" >/dev/null 2>&1 || true
+    exit 0
+fi
+
+entries=()
+for line in "${DEVICE_LINES[@]}"; do
+    mac=$(printf '%s' "$line" | awk '{print $2}')
+    name=${line#Device $mac }
+    info=$(bluetoothctl info "$mac" 2>/dev/null || true)
+    status=""
+    if printf '%s' "$info" | grep -q "Connected: yes"; then
+        status=" (connected)"
+    elif printf '%s' "$info" | grep -q "Paired: yes"; then
+        status=" (paired)"
+    fi
+    entries+=("$mac\t$name$status")
+done
+
+entries+=("SCAN\tScan for new devices")
+
+selection=$(printf '%s\n' "${entries[@]}" | "${MENU_CMD[@]}" || true)
+
+if [ -z "$selection" ]; then
+    exit 0
+fi
+
+mac=${selection%%$'\t'*}
+label=${selection#*$'\t'}
+
+if [ "$mac" = "SCAN" ]; then
+    bluetoothctl --timeout 7 scan on >/dev/null 2>&1 || true
+    notify-send "Bluetooth" "Scanning for nearby devices" >/dev/null 2>&1 || true
+    exit 0
+fi
+
+info=$(bluetoothctl info "$mac" 2>/dev/null || true)
+
+if printf '%s' "$info" | grep -q "Connected: yes"; then
+    bluetoothctl disconnect "$mac" >/dev/null 2>&1 || true
+    notify-send "Bluetooth" "Disconnected $label" >/dev/null 2>&1 || true
+else
+    bluetoothctl connect "$mac" >/dev/null 2>&1 || true
+    notify-send "Bluetooth" "Connecting to $label" >/dev/null 2>&1 || true
+fi

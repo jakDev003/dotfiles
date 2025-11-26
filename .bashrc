@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 case $- in
     *i*) ;;
       *) return;;
@@ -100,26 +101,45 @@ show_my_info () {
 }
 
 alias vi="vim"
-alias nvim="/usr/local/bin/nvim/bin/nvim"
+#alias nvim="/usr/local/bin/nvim/bin/nvim"
 alias luamake="/home/josh/lua-language-server/3rd/luamake/luamake"
 
 eval "$(starship init bash)" 
 clear
 
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+#export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-25-openjdk
 export PATH=$PATH:$JAVA_HOME/bin
 
-export JDTLS_HOME=/usr/local/bin/jdtls
-export PATH=$PATH:$JDTLS_HOME/bin
+#export JDTLS_HOME=/usr/local/bin/jdtls
+#export PATH=$PATH:$JDTLS_HOME/bin
 
-export M2_HOME=/usr/local/apache-maven
-export M2=$M2_HOME/bin
-export PATH=$M2:$PATH
+#export M2_HOME=/usr/local/apache-maven
+#export M2=$M2_HOME/bin
+#export PATH=$M2:$PATH
 
-export PATH=$PATH:/usr/local/bin/googleJavaFormat
+#export PATH=$PATH:/usr/local/bin/googleJavaFormat
 
-show_my_info
+export PATH="$PATH:$HOME/development/flutter/bin"
+
+export PATH="$PATH:/home/josh/.dotnet/tools"
+
+#show_my_info
+fastfetch
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Ensure standard PATH
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin${PATH:+:${PATH}}"
+
+# Docker-specific (if installed via pacman)
+export PATH="/usr/bin:$PATH"
+
+# Source any custom profiles if needed
+if [ -f ~/.bash_aliases ]; then . ~/.bash_aliases; fi
+
+# opencode
+export PATH=/home/josh/.opencode/bin:$PATH
+

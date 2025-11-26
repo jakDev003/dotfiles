@@ -1,152 +1,119 @@
 * {
   border: none;
-  font-family: "FiraMono Nerd Font";
-  font-size: 17px;
+  margin: 0;
+  padding: 0;
+  font-family: "JetBrainsMono Nerd Font", "FiraCode Nerd Font", "Fira Mono", monospace;
+  font-size: 16px;
+  color: #f2f1ff;
 }
 
 window#waybar {
-  background: black;
+  background: linear-gradient(135deg, rgba(68, 24, 122, 0.95), rgba(12, 37, 68, 0.9));
+  border-bottom: 2px solid rgba(167, 112, 255, 0.6);
+  padding: 6px 12px;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+  padding: 0 8px;
+}
+
+.modules-left > widget,
+.modules-center > widget,
+.modules-right > widget {
+  margin: 0 6px;
+}
+
+#custom-launcher,
+#cpu,
+#memory,
+#temperature,
+#battery,
+#backlight,
+#river-window,
+#river-tags,
+#clock,
+#pulseaudio,
+#network,
+#bluetooth,
+#custom-power {
+  background: rgba(23, 16, 40, 0.65);
+  border-radius: 12px;
+  padding: 6px 12px;
+  border: 1px solid rgba(142, 92, 255, 0.25);
 }
 
 #custom-launcher {
   font-size: 26px;
-  color: #59acff;
+  color: #9ef6ff;
   padding-left: 16px;
   padding-right: 16px;
-  border-radius: 4px;
-  background: #372736;
-  border-bottom: 2px solid black;
 }
 
-#cpu,
-#memory,
-#battery,
-#backlight,
-#temperature {
-  margin-left: 8px;
-  margin-right: 8px;
-  color: white;
-}
-
-#pulseaudio {
-  color: #b0fc38;
-  margin-left: 8px;
-  margin-right: 8px;
-}
-
-#network {
-  margin-left: 8px;
-  margin-right: 8px;
-  color: orange;
-}
-
-#temperature.critical {
-  color: red;
-}
-
-#battery {
-  color: #3ded97;
-}
-
-#battery.low {
-  color: red;
-}
-
+#cpu { color: #ffacf7; }
+#memory { color: #9ef6ff; }
+#temperature { color: #ffe074; }
+#temperature.critical { color: #ff6382; }
+#battery { color: #98ffac; }
 #battery.charging,
-#battery.plugged {
-  color: #59acff;
-}
-
+#battery.plugged { color: #74d9ff; }
 #battery.low:not(.charging) {
-  animation-name: blink;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
+  color: #ff8a7a;
+}
+#backlight { color: #ffd166; }
+#pulseaudio { color: #c2a4ff; }
+#pulseaudio.muted { color: #666ba5; }
+#network { color: #ff9f7f; }
+#network.disconnected { color: #5a5f80; }
+#clock { color: #b6f5ff; font-weight: 600; }
+
+#river-window {
+  font-weight: 600;
+  color: #f6f1ff;
 }
 
-#backlight {
-  color: yellow;
+#river-tags {
+  padding: 4px 8px;
 }
 
-#window {
-  font-weight: bolder;
-  color: white;
+#river-tags button {
+  background: transparent;
+  color: #9d94ff;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
 }
 
-#tags {
-  background: #372736;
-  border-radius: 4px;
+#river-tags button.focused {
+  color: #ffe28b;
+  border-color: rgba(141, 91, 255, 0.6);
+  background: rgba(141, 91, 255, 0.25);
 }
 
-#tags button {
-  color: gold;
+#river-tags button.urgent {
+  color: #ff7b9c;
+  border-color: rgba(255, 95, 123, 0.55);
+  background: rgba(255, 95, 123, 0.2);
 }
 
-#tags button.occupied {
-  color: #59acff;
-}
-
-#tags button.focused {
-  color: #59acff;
-  border: 1px solid #59acff;
-}
-
-#tags button.focused:hover {
-  color: #59acff;
-}
-
-#tags button:hover {
-  color: #b0fc38;
-}
-
-#clock {
-  margin-left: 16px;
-  margin-right: 16px;
-  color: #abe9b3;
+#river-tags button:hover {
+  color: #d8ffee;
+  border-color: rgba(153, 255, 232, 0.35);
 }
 
 #bluetooth {
-  margin-left: 8px;
-  margin-right: 8px;
-  padding-left: 14px;
-  padding-right: 14px;
-  background: #372736;
-  border-radius: 50%;
-  color: white;
-}
-
-#bluetooth.on {
-  color: blue;
-  animation-name: blink;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  border-radius: 50%;
-}
-
-#bluetooth.off {
-  border-radius: 50%;
+  color: #a0f0ff;
+  border-radius: 16px;
 }
 
 #bluetooth.connected {
-  color: #59acff;
-  border-radius: 15px;
+  color: #7cf7b2;
+  border-color: rgba(92, 255, 160, 0.5);
 }
 
 #custom-power {
-  font-size: 28px;
-  margin-left: 8px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 50%;
-  color: white;
-  background: red;
-}
-
-@keyframes blink {
-  to {
-    color: #ffffff;
-  }
+  font-size: 24px;
+  color: #ffe9f9;
+  background: linear-gradient(135deg, rgba(255, 87, 146, 0.9), rgba(138, 46, 255, 0.85));
 }

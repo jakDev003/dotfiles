@@ -13,14 +13,13 @@ return {
 
 			mason.setup()
 
-			local has_lsp, lspconfig = pcall(require, "lspconfig")
-			local ts_name = (has_lsp and lspconfig.ts_ls) and "ts_ls" or "tsserver"
+			local ts_name = "ts_ls"
 
 			mlsp.setup({
 				automatic_installation = true,
 				ensure_installed = {
 					"cssls",
-					"eslint",
+
 					"html",
 					"jsonls",
 					"jdtls",
@@ -53,30 +52,23 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 		},
 		config = function()
-			local ok_lsp, lspconfig = pcall(require, "lspconfig")
-			if not ok_lsp then
-				vim.notify("nvim-lspconfig not found", vim.log.levels.ERROR)
-				return
-			end
-
 			local on_attach = function(_, _) end
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-			local ts_name = lspconfig.ts_ls and "ts_ls" or "tsserver"
+			local ts_name = "ts_ls"
 
 			local function setup(server, opts)
-				if not lspconfig[server] then
+				if not vim.lsp.config[server] then
 					vim.notify(("LSP '%s' not available in your lspconfig"):format(server), vim.log.levels.WARN)
 					return
 				end
 				opts = opts or {}
 				opts.capabilities = opts.capabilities or capabilities
 				opts.on_attach = opts.on_attach or on_attach
-				lspconfig[server].setup(opts)
+				vim.lsp.config(server, opts)
 			end
 
 			local servers = {
 				"cssls",
-				"eslint",
 				"html",
 				"jsonls",
 				"jdtls",
@@ -86,6 +78,7 @@ return {
 
 			for _, s in ipairs(servers) do
 				setup(s)
+				vim.lsp.enable(s)
 			end
 		end,
 	},
