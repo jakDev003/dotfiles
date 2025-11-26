@@ -2,7 +2,6 @@
     "layer": "top",
     "position": "top",
     "modules-left": [
-        "custom/launcher",
         "cpu",
         "memory",
         "temperature",
@@ -18,11 +17,6 @@
         "bluetooth",
         "custom/power"
     ],
-    "custom/launcher": {
-        "format": "",
-        "on-click": "fuzzel --show drun",
-        "tooltip": false
-    },
     "cpu": {
         "format": " {usage}%"
     },
