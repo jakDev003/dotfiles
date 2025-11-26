@@ -68,6 +68,30 @@ pull_configs() {
   fi
 
   echo "Pull complete."
+  
+  reload_services
+}
+
+reload_services() {
+  echo "Reloading Hyprland and Waybar..."
+  
+  if command -v hyprctl >/dev/null 2>&1; then
+    echo "Reloading Hyprland configuration..."
+    hyprctl reload
+  else
+    echo "Warning: hyprctl not found; skipping Hyprland reload." >&2
+  fi
+  
+  if pgrep -x waybar >/dev/null; then
+    echo "Restarting Waybar..."
+    killall waybar
+    waybar >/dev/null 2>&1 &
+    disown
+  else
+    echo "Warning: Waybar is not running; skipping restart." >&2
+  fi
+  
+  echo "Services reloaded."
 }
 
 backup_configs() {
