@@ -69,7 +69,67 @@ pull_configs() {
 
   echo "Pull complete."
   
+  install_fonts
   reload_services
+}
+
+install_fonts() {
+  echo "Checking and installing required fonts..."
+  
+  local fonts_needed=(
+    "jetbrains-mono-fonts"
+    "fira-code-fonts"
+  )
+  
+  # Detect package manager and install fonts
+  if command -v dnf >/dev/null 2>&1; then
+    # Fedora/RHEL
+    local missing_fonts=()
+    for font in "${fonts_needed[@]}"; do
+      if ! rpm -q "$font" >/dev/null 2>&1; then
+        missing_fonts+=("$font")
+      fi
+    done
+    
+    if [ "${#missing_fonts[@]}" -gt 0 ]; then
+      echo "Installing missing fonts: ${missing_fonts[*]}"
+      sudo dnf install -y "${missing_fonts[@]}"
+    else
+      echo "All required fonts are already installed."
+    fi
+    
+  elif command -v pacman >/dev/null 2>&1; then
+    # Arch/CachyOS
+    local arch_fonts=(
+      "ttf-jetbrains-mono-nerd"
+      "ttf-firacode-nerd"
+    )
+    local missing_fonts=()
+    for font in "${arch_fonts[@]}"; do
+      if ! pacman -Qi "$font" >/dev/null 2>&1; then
+        missing_fonts+=("$font")
+      fi
+    done
+    
+    if [ "${#missing_fonts[@]}" -gt 0 ]; then
+      echo "Installing missing fonts: ${missing_fonts[*]}"
+      sudo pacman -S --noconfirm "${missing_fonts[@]}"
+    else
+      echo "All required fonts are already installed."
+    fi
+    
+  else
+    echo "Warning: Unsupported package manager. Please install JetBrainsMono and FiraCode Nerd Fonts manually." >&2
+    return 1
+  fi
+  
+  # Refresh font cache
+  if command -v fc-cache >/dev/null 2>&1; then
+    echo "Refreshing font cache..."
+    fc-cache -fv >/dev/null 2>&1
+  fi
+  
+  echo "Font installation complete."
 }
 
 reload_services() {
