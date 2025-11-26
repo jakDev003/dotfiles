@@ -74,14 +74,14 @@ pull_configs() {
 }
 
 install_fonts() {
-  echo "Checking and installing required fonts..."
+  echo "Checking and installing fonts and wallpaper dependencies..."
   
   local fonts_needed=(
     "jetbrains-mono-fonts"
     "fira-code-fonts"
   )
   
-  # Detect package manager and install fonts
+  # Detect package manager and install fonts + hyprpaper
   if command -v dnf >/dev/null 2>&1; then
     # Fedora/RHEL
     local missing_fonts=()
@@ -96,6 +96,15 @@ install_fonts() {
       sudo dnf install -y "${missing_fonts[@]}"
     else
       echo "All required fonts are already installed."
+    fi
+
+    if ! rpm -q hyprpaper >/dev/null 2>&1; then
+      echo "Installing hyprpaper wallpaper daemon"
+      if ! sudo dnf install -y hyprpaper; then
+        echo "Warning: failed to install hyprpaper via dnf; please install manually." >&2
+      fi
+    else
+      echo "hyprpaper already installed."
     fi
     
   elif command -v pacman >/dev/null 2>&1; then
@@ -117,9 +126,18 @@ install_fonts() {
     else
       echo "All required fonts are already installed."
     fi
+
+    if ! pacman -Qi hyprpaper >/dev/null 2>&1; then
+      echo "Installing hyprpaper wallpaper daemon"
+      if ! sudo pacman -S --noconfirm hyprpaper; then
+        echo "Warning: failed to install hyprpaper via pacman; please install manually." >&2
+      fi
+    else
+      echo "hyprpaper already installed."
+    fi
     
   else
-    echo "Warning: Unsupported package manager. Please install JetBrainsMono and FiraCode Nerd Fonts manually." >&2
+    echo "Warning: Unsupported package manager. Please install JetBrainsMono, FiraCode Nerd Fonts, and hyprpaper manually." >&2
     return 1
   fi
   
@@ -129,7 +147,7 @@ install_fonts() {
     fc-cache -fv >/dev/null 2>&1
   fi
   
-  echo "Font installation complete."
+  echo "Dependency installation complete."
 }
 
 reload_services() {
