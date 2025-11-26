@@ -17,6 +17,33 @@ log() {
   printf '%s %s\n' "$(date +'%F %T')" "$*" >>"$LOG_FILE"
 }
 
+refresh_hypr_signature() {
+  local runtime_dir="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+  local hypr_dir="$runtime_dir/hypr"
+
+  if [ ! -d "$hypr_dir" ]; then
+    unset HYPRLAND_INSTANCE_SIGNATURE
+    return 1
+  fi
+
+  local newest_dir
+  newest_dir=$(ls -td "$hypr_dir"/*/ 2>/dev/null | head -n1 || true)
+  if [ -z "$newest_dir" ]; then
+    unset HYPRLAND_INSTANCE_SIGNATURE
+    return 1
+  fi
+
+  newest_dir=${newest_dir%/}
+  local candidate=${newest_dir##*/}
+
+  if [ -n "$candidate" ] && [ "${HYPRLAND_INSTANCE_SIGNATURE:-}" != "$candidate" ]; then
+    export HYPRLAND_INSTANCE_SIGNATURE="$candidate"
+    log "Using Hyprland instance signature $candidate"
+  fi
+
+  return 0
+}
+
 select_backend() {
   if command -v hyprpaper >/dev/null 2>&1; then
     BACKEND="hyprpaper"
@@ -32,6 +59,7 @@ select_backend() {
 wait_for_hyprctl() {
   local tries=${1:-60}
   while (( tries-- > 0 )); do
+    refresh_hypr_signature || true
     if hyprctl monitors >/dev/null 2>&1; then
       return 0
     fi
@@ -92,6 +120,7 @@ require_images() {
 require_monitors() {
   local tries=${1:-60}
   while (( tries-- > 0 )); do
+    refresh_hypr_signature || true
     local output
     output=$(hyprctl monitors 2>/dev/null || true)
 
@@ -131,6 +160,7 @@ ensure_backend() {
 
       if wait_for_hyprctl 40; then
         for _ in $(seq 1 40); do
+          refresh_hypr_signature || true
           if hyprctl hyprpaper listloaded >/dev/null 2>&1; then
             return 0
           fi
@@ -166,6 +196,7 @@ apply_wallpaper() {
 
   case "$BACKEND" in
     hyprpaper)
+      refresh_hypr_signature || true
       hyprctl hyprpaper preload "$image" >/dev/null 2>&1 || true
       hyprctl hyprpaper wallpaper "$monitor,$image" >/dev/null 2>&1 || true
       ;;
