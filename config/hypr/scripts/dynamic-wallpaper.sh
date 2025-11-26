@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-WALL_DIR="/home/josh/Pictures/wallpapers/Dynamic-Wallpapers/Dark"
+WALL_DIR=${WALL_DIR:-"/home/josh/Pictures/wallpapers/Dynamic-Wallpapers/Dark"}
 INTERVAL_SECONDS=${1:-60}
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}"
 LOG_FILE="$CACHE_DIR/hyprpaper-dynamic.log"
+WALL_DIR_WAIT_SECONDS=${WALL_DIR_WAIT_SECONDS:-120}
+WALL_DIR_LOG_INTERVAL=${WALL_DIR_LOG_INTERVAL:-30}
+
+declare -a IMAGES=()
+declare -a MONITORS=()
 
 mkdir -p "$CACHE_DIR"
 
@@ -36,24 +41,53 @@ wait_for_hyprctl() {
 }
 
 require_images() {
+  local max_wait_secs="$WALL_DIR_WAIT_SECONDS"
+  local log_interval="$WALL_DIR_LOG_INTERVAL"
+  local sleep_seconds=2
+  local waited=0
+  local logged_missing=0
+  local logged_empty=0
+
+  while true; do
+    if [ -d "$WALL_DIR" ]; then
+      local -a found=()
+      while IFS= read -r -d '' file; do
+        found+=("$file")
+      done < <(find "$WALL_DIR" -maxdepth 1 -type f \
+        \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -print0 | sort -z)
+
+      if [ ${#found[@]} -gt 0 ]; then
+        IMAGES=("${found[@]}")
+        return 0
+      fi
+
+      if (( logged_empty == 0 )) || (( log_interval > 0 && waited > 0 && waited % log_interval == 0 )); then
+        log "Wallpaper directory $WALL_DIR is empty; waited ${waited}s so far"
+        logged_empty=1
+      fi
+    else
+      if (( logged_missing == 0 )) || (( log_interval > 0 && waited > 0 && waited % log_interval == 0 )); then
+        log "Waiting for wallpaper directory $WALL_DIR; waited ${waited}s so far"
+        logged_missing=1
+      fi
+    fi
+
+    if [ "$waited" -ge "$max_wait_secs" ]; then
+      break
+    fi
+
+    sleep "$sleep_seconds"
+    waited=$((waited + sleep_seconds))
+  done
+
   if [ ! -d "$WALL_DIR" ]; then
-    log "Wallpaper directory $WALL_DIR does not exist"
-    exit 1
+    log "Wallpaper directory $WALL_DIR did not become available after ${waited}s"
+  else
+    log "No images found in $WALL_DIR after ${waited}s"
   fi
-
-  local -a found=()
-  while IFS= read -r -d '' file; do
-    found+=("$file")
-  done < <(find "$WALL_DIR" -maxdepth 1 -type f \
-    \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -print0 | sort -z)
-
-  if [ ${#found[@]} -eq 0 ]; then
-    log "No images found in $WALL_DIR"
-    exit 1
-  fi
-
-  IMAGES=("${found[@]}")
+  exit 1
 }
+
 
 require_monitors() {
   local tries=${1:-60}
