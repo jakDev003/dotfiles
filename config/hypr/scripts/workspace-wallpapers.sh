@@ -53,6 +53,25 @@ if [ -n "$initial_wallpaper" ]; then
     set_wallpaper "$initial_wallpaper"
 fi
 
+# Background loop to change wallpaper every minute
+(
+    while true; do
+        sleep 60
+        current_ws=$(hyprctl activeworkspace -j | jq -r '.id')
+        # Get a new random wallpaper and update cache
+        new_wallpaper=$(get_random_wallpaper)
+        if [ -n "$new_wallpaper" ]; then
+            # Update cache with new wallpaper
+            if [ -f "$CACHE_FILE" ]; then
+                grep -v "^$current_ws:" "$CACHE_FILE" > "$CACHE_FILE.tmp" 2>/dev/null
+                mv "$CACHE_FILE.tmp" "$CACHE_FILE"
+            fi
+            echo "$current_ws:$new_wallpaper" >> "$CACHE_FILE"
+            set_wallpaper "$new_wallpaper"
+        fi
+    done
+) &
+
 # Listen to workspace change events
 socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r line; do
     # Parse workspace change events
